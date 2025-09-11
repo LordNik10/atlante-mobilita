@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { ReportCard } from "@/components/report-card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -11,23 +12,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import { UserAvatar } from "@/components/user-avatar";
+import { categoryLabels, mockReports, statusLabels } from "@/lib/mock-data";
+import { getStoredReports } from "@/lib/storage";
+import type { Report, ReportCategory, ReportStatus } from "@/lib/types";
 import {
-  MapPin,
-  Filter,
-  Search,
+  AlertCircle,
   ArrowLeft,
   Calendar,
+  Filter,
+  MapPin,
+  Search,
   User,
-  AlertCircle,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import type { Report, ReportCategory, ReportStatus } from "@/lib/types";
-import { categoryLabels, statusLabels, mockReports } from "@/lib/mock-data";
-import { getStoredReports } from "@/lib/storage";
-import { MapView } from "@/components/map-view";
-import { ReportCard } from "@/components/report-card";
-import { UserAvatar } from "@/components/user-avatar";
+import { useEffect, useState } from "react";
+
+const Map = dynamic(() => import("../../components/dynamic-map"), {
+  ssr: false, // 👈 disabilita SSR per Leaflet
+});
 
 export default function MapPage() {
   const [reports, setReports] = useState<Report[]>([]);
@@ -284,11 +288,12 @@ export default function MapPage() {
 
         {/* Map */}
         <div className="flex-1 relative">
-          <MapView
+          {/* <MapView
             reports={filteredReports}
             selectedReport={selectedReport}
             onReportSelect={setSelectedReport}
-          />
+          /> */}
+          <Map />
 
           {/* Selected Report Details */}
           {selectedReport && (

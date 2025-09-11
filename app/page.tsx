@@ -15,8 +15,11 @@ import {
   Accessibility,
   MessageSquare,
 } from "lucide-react";
+import { UserAvatar } from "@/components/user-avatar";
+import { getUserInfoFromCookie } from "@/utils/supabase/server";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const user = await getUserInfoFromCookie();
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50">
       {/* Header */}
@@ -38,6 +41,7 @@ export default function HomePage() {
               <Link href="/report">
                 <Button>Segnala</Button>
               </Link>
+              <UserAvatar name={user?.name} />
             </nav>
           </div>
         </div>

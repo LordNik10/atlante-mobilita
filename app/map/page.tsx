@@ -27,6 +27,7 @@ import { categoryLabels, statusLabels, mockReports } from "@/lib/mock-data";
 import { getStoredReports } from "@/lib/storage";
 import { MapView } from "@/components/map-view";
 import { ReportCard } from "@/components/report-card";
+import { UserAvatar } from "@/components/user-avatar";
 
 export default function MapPage() {
   const [reports, setReports] = useState<Report[]>([]);
@@ -121,9 +122,12 @@ export default function MapPage() {
                 </h1>
               </div>
             </Link>
-            <Link href="/report">
-              <Button>Nuova Segnalazione</Button>
-            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/report">
+                <Button>Nuova Segnalazione</Button>
+              </Link>
+              <UserAvatar />
+            </div>
           </div>
         </div>
       </header>

@@ -49,10 +49,10 @@ async function getCookieData(): Promise<ReadonlyRequestCookies> {
 }
 
 export async function getUserInfoFromCookie() {
-  await checkSession();
+  // await checkSession();
   const cookieStore = await getCookieData();
   const cookie = cookieStore.get("x-user-info")?.value;
-  if (!cookie) throw new Error("No user info cookie found");
+  if (!cookie) return null;
   return JSON.parse(cookie) as user;
 }
 

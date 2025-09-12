@@ -13,9 +13,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserAvatar } from "@/components/user-avatar";
-import { categoryLabels, mockReports, statusLabels } from "@/lib/mock-data";
-import { getStoredReports } from "@/lib/storage";
-import type { Report, ReportCategory, ReportStatus } from "@/lib/types";
+import { categoryLabels, priorityLabels, statusLabels } from "@/lib/mock-data";
+import type {
+  Priority,
+  Report,
+  ReportCategory,
+  ReportStatus,
+} from "@/lib/types";
 import {
   AlertCircle,
   ArrowLeft,
@@ -28,6 +32,7 @@ import {
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import dayjs from "dayjs";
 
 const Map = dynamic(() => import("../../components/dynamic-map"), {
   ssr: false, // 👈 disabilita SSR per Leaflet
@@ -38,30 +43,31 @@ export default function MapDetails({ name }: { name?: string }) {
   const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [filters, setFilters] = useState({
-    category: "all" as ReportCategory | "all",
-    status: "all" as ReportStatus | "all",
+    severity: "all" as Priority | "all",
     search: "",
   });
 
+  const getReports = async () => {
+    const res = await fetch("/api/report/fetch");
+    const data = await res.json();
+    console.log({ data });
+    setReports(data);
+    setFilteredReports(data);
+  };
+
+  console.log({ reports });
+
   useEffect(() => {
-    // Load reports from storage and merge with mock data
-    const storedReports = getStoredReports();
-    const allReports = [...mockReports, ...storedReports];
-    setReports(allReports);
-    setFilteredReports(allReports);
+    getReports();
   }, []);
 
   useEffect(() => {
     let filtered = reports;
 
-    if (filters.category !== "all") {
+    if (filters.severity !== "all") {
       filtered = filtered.filter(
-        (report) => report.category === filters.category
+        (report) => report.severity === filters.severity
       );
-    }
-
-    if (filters.status !== "all") {
-      filtered = filtered.filter((report) => report.status === filters.status);
     }
 
     if (filters.search) {
@@ -69,8 +75,9 @@ export default function MapDetails({ name }: { name?: string }) {
       filtered = filtered.filter(
         (report) =>
           report.title.toLowerCase().includes(searchLower) ||
-          report.description.toLowerCase().includes(searchLower) ||
-          report.location.address.toLowerCase().includes(searchLower)
+          report.description?.toLowerCase().includes(searchLower) ||
+          report.lat.toString().includes(searchLower) ||
+          report.lng.toString().includes(searchLower)
       );
     }
 
@@ -159,42 +166,20 @@ export default function MapDetails({ name }: { name?: string }) {
               </div>
 
               <Select
-                value={filters.category}
+                value={filters.severity}
                 onValueChange={(value) =>
                   setFilters((prev) => ({
                     ...prev,
-                    category: value as ReportCategory | "all",
+                    severity: value as Priority | "all",
                   }))
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Tutte le categorie" />
+                  <SelectValue placeholder="Tutte le priorità" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Tutte le categorie</SelectItem>
-                  {Object.entries(categoryLabels).map(([key, label]) => (
-                    <SelectItem key={key} value={key}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              <Select
-                value={filters.status}
-                onValueChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    status: value as ReportStatus | "all",
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Tutti gli stati" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tutti gli stati</SelectItem>
-                  {Object.entries(statusLabels).map(([key, label]) => (
+                  <SelectItem value="all">Tutte le priorità</SelectItem>
+                  {Object.entries(priorityLabels).map(([key, label]) => (
                     <SelectItem key={key} value={key}>
                       {label}
                     </SelectItem>
@@ -225,48 +210,28 @@ export default function MapDetails({ name }: { name?: string }) {
                     </CardTitle>
                     <Badge
                       className={`text-xs ${getPriorityColor(
-                        report.priority
-                      )} hover:${getPriorityColor(report.priority)}`}
+                        report.severity
+                      )} hover:${getPriorityColor(report.severity)}`}
                     >
-                      {report.priority}
+                      {report.severity}
                     </Badge>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      className={`text-xs ${getStatusColor(
-                        report.status
-                      )} hover:${getStatusColor(report.status)}`}
-                    >
-                      {statusLabels[report.status]}
-                    </Badge>
-                    <span className="text-xs text-gray-500">
-                      {categoryLabels[report.category]}
-                    </span>
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
                   <p className="text-sm text-gray-600 line-clamp-2 mb-2">
                     {report.description}
                   </p>
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <MapPin className="w-3 h-3" />
-                      <span className="truncate">
-                        {report.location.address}
-                      </span>
-                    </div>
-                  </div>
                   <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
                     <div className="flex items-center gap-1">
                       <Calendar className="w-3 h-3" />
                       <span>
-                        {report.submittedAt.toLocaleDateString("it-IT")}
+                        {dayjs(report.created_at).format("DD/MM/YYYY")}
                       </span>
                     </div>
-                    {report.submittedBy && (
+                    {report.name && (
                       <div className="flex items-center gap-1">
                         <User className="w-3 h-3" />
-                        <span>Utente registrato</span>
+                        <span>{report.name}</span>
                       </div>
                     )}
                   </div>

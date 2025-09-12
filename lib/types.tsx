@@ -1,20 +1,14 @@
 export interface Report {
   id: string;
   title: string;
-  description: string;
-  category: ReportCategory;
-  status: ReportStatus;
-  location: {
-    lat: number;
-    lng: number;
-    address: string;
-  };
-  photos?: string[];
-  submittedBy: string | null; // null for anonymous reports
-  submittedAt: Date;
-  updatedAt?: Date;
-  municipalNotes?: string;
-  priority: Priority;
+  description: string | null;
+  lat: number;
+  lng: number;
+  severity: Priority;
+  user_id: string;
+  email: string;
+  name: string;
+  created_at: Date;
 }
 
 export type ReportCategory =

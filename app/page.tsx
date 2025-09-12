@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { UserAvatar } from "@/components/user-avatar";
 import { getUserInfoFromCookie } from "@/utils/supabase/server";
+import Image from "next/image";
+import logo from "../public/pinmov-logo.png";
 
 export default async function HomePage() {
   const user = await getUserInfoFromCookie();
@@ -27,11 +29,10 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                <MapPin className="w-5 h-5 text-white" />
-              </div>
+              <Image src={logo} alt="Logo" className="w-24 h-24 text-white" />
+
               <h1 className="text-xl font-bold text-gray-900">
-                Atlante Mobilità
+                P.In.Mov - Atlante della Mobilità Giusta
               </h1>
             </div>
             <nav className="flex items-center gap-4">
@@ -203,11 +204,8 @@ export default async function HomePage() {
           <div className="grid md:grid-cols-3 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-white" />
-                </div>
                 <h3 className="text-lg font-semibold">
-                  Atlante della Mobilità Giusta
+                  P.In.Mov - Atlante della Mobilità Giusta
                 </h3>
               </div>
               <p className="text-gray-400">

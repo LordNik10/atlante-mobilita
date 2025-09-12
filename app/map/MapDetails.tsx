@@ -1,5 +1,6 @@
 "use client";
 
+import { HubCard } from "@/components/hub-card";
 import { ReportCard } from "@/components/report-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,17 +23,17 @@ import {
   ArrowLeft,
   Calendar,
   Filter,
-  MapPin,
   Search,
   User,
 } from "lucide-react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useReports } from "./useReports";
-import { Hub, useHubs } from "./useHubs";
-import { HubCard } from "@/components/hub-card";
+import logo from "../../public/pinmov-logo.png";
 import { user } from "../sever-actions/user/getUserInfo";
+import { Hub, useHubs } from "./useHubs";
+import { useReports } from "./useReports";
 
 const Map = dynamic(() => import("../../components/dynamic-map"), {
   ssr: false, // 👈 disabilita SSR per Leaflet
@@ -110,9 +111,7 @@ export default function MapDetails({ user }: { user: user | null }) {
             <Link href="/" className="flex items-center gap-3">
               <ArrowLeft className="w-5 h-5" />
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <MapPin className="w-5 h-5 text-white" />
-                </div>
+                <Image src={logo} alt="Logo" className="w-24 h-24 text-white" />
                 <h1 className="text-xl font-bold text-gray-900">
                   Mappa delle Segnalazioni
                 </h1>

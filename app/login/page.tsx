@@ -9,6 +9,8 @@ import {
 import { ArrowLeft, MapPin } from "lucide-react";
 import Link from "next/link";
 import { login } from "./actions";
+import Image from "next/image";
+import logo from "../../public/pinmov-logo.png";
 
 export default async function LoginPage() {
   return (
@@ -21,9 +23,11 @@ export default async function LoginPage() {
         >
           <ArrowLeft className="w-5 h-5" />
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-white" />
-            </div>
+            <Image
+              src={logo}
+              alt="Logo"
+              className="w-24 h-24 text-white mx-auto"
+            />
             <span className="font-medium">Torna alla Home</span>
           </div>
         </Link>
@@ -31,12 +35,12 @@ export default async function LoginPage() {
 
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <MapPin className="w-6 h-6 text-white" />
-          </div>
-          <CardTitle className="text-2xl">
-            Atlante della Mobilità Giusta
-          </CardTitle>
+          <Image
+            src={logo}
+            alt="Logo"
+            className="w-24 h-24 text-white mx-auto"
+          />
+          <CardTitle className="text-2xl">Accedi a P.In.Mov</CardTitle>
           <CardDescription>
             Accedi con il tuo account Google per iniziare
           </CardDescription>

@@ -30,6 +30,8 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useReports } from "./useReports";
+import { Hub, useHubs } from "./useHubs";
+import { HubCard } from "@/components/hub-card";
 
 const Map = dynamic(() => import("../../components/dynamic-map"), {
   ssr: false, // 👈 disabilita SSR per Leaflet
@@ -37,18 +39,26 @@ const Map = dynamic(() => import("../../components/dynamic-map"), {
 
 export default function MapDetails({ name }: { name?: string }) {
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
+  const [selectedHub, setSelectedHub] = useState<Hub | null>(null);
   const [filters, setFilters] = useState({
     severity: "all" as Priority | "all",
     search: "",
   });
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const { reports, filteredReports, getReports, setFilteredReports } =
     useReports();
+
+  const { hubs, getHubs } = useHubs();
 
   console.log({ reports });
 
   useEffect(() => {
     getReports();
+  }, []);
+
+  useEffect(() => {
+    getHubs();
   }, []);
 
   useEffect(() => {
@@ -103,118 +113,169 @@ export default function MapDetails({ name }: { name?: string }) {
 
       <div className="flex h-[calc(100vh-4rem)]">
         {/* Sidebar */}
-        <div className="w-96 bg-white border-r overflow-y-auto">
-          {/* Filters */}
-          <div className="p-4 border-b bg-gray-50">
-            <h2 className="font-semibold mb-4 flex items-center gap-2">
-              <Filter className="w-4 h-4" />
-              Filtri
-            </h2>
-            <div className="space-y-3">
-              <div className="relative">
-                <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <Input
-                  placeholder="Cerca segnalazioni..."
-                  value={filters.search}
-                  onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, search: e.target.value }))
+        {!isFiltersOpen && (
+          <Button
+            onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+            variant="ghost"
+            size="sm"
+          >
+            <Filter className="w-4 h-4" />
+            Filtri
+          </Button>
+        )}
+        {isFiltersOpen && (
+          <div className="w-96 bg-white border-r overflow-y-auto">
+            {/* Filters */}
+            <div className="p-4 border-b bg-gray-50">
+              <h2 className="font-semibold mb-4 flex items-center gap-2">
+                <Button
+                  onClick={() => setIsFiltersOpen(!isFiltersOpen)}
+                  variant="ghost"
+                  size="sm"
+                >
+                  <Filter className="w-4 h-4" />
+                  Filtri
+                </Button>
+              </h2>
+              <div className="space-y-3">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <Input
+                    placeholder="Cerca segnalazioni..."
+                    value={filters.search}
+                    onChange={(e) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        search: e.target.value,
+                      }))
+                    }
+                    className="pl-10"
+                  />
+                </div>
+
+                <Select
+                  value={filters.severity}
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({
+                      ...prev,
+                      severity: value as Priority | "all",
+                    }))
                   }
-                  className="pl-10"
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Tutte le priorità" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Tutte le priorità</SelectItem>
+                    {Object.entries(priorityLabels).map(([key, label]) => (
+                      <SelectItem key={key} value={key}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
-              <Select
-                value={filters.severity}
-                onValueChange={(value) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    severity: value as Priority | "all",
-                  }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Tutte le priorità" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">Tutte le priorità</SelectItem>
-                  {Object.entries(priorityLabels).map(([key, label]) => (
-                    <SelectItem key={key} value={key}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="mt-4 text-sm text-gray-600">
+                {filteredReports.length} segnalazioni trovate
+              </div>
             </div>
 
-            <div className="mt-4 text-sm text-gray-600">
-              {filteredReports.length} segnalazioni trovate
-            </div>
-          </div>
-
-          {/* Reports List */}
-          <div className="p-4 space-y-4">
-            {filteredReports.map((report) => (
-              <Card
-                key={report.id}
-                className={`cursor-pointer transition-all hover:shadow-md ${
-                  selectedReport?.id === report.id ? "ring-2 ring-blue-500" : ""
-                }`}
-                onClick={() => setSelectedReport(report)}
-              >
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <CardTitle className="text-sm font-medium line-clamp-2">
-                      {report.title}
-                    </CardTitle>
-                    <Badge
-                      className={`text-xs ${getPriorityColor(
-                        report.severity
-                      )} hover:${getPriorityColor(report.severity)}`}
-                    >
-                      {report.severity}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-                    {report.description}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      <span>
-                        {dayjs(report.created_at).format("DD/MM/YYYY")}
-                      </span>
+            {/* Reports List */}
+            <div className="p-4 space-y-4">
+              <p>Hub</p>
+              {hubs.map((hub) => (
+                <Card
+                  key={hub.id}
+                  className={`cursor-pointer transition-all hover:shadow-md ${
+                    selectedHub?.id === hub.id ? "ring-2 ring-blue-500" : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedHub(hub);
+                    setSelectedReport(null);
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <CardTitle className="text-sm font-medium line-clamp-2">
+                        {hub.name}
+                      </CardTitle>
+                      <Badge>{hub.services}</Badge>
                     </div>
-                    {report.name && (
+                  </CardHeader>
+                </Card>
+              ))}
+              <p>Segnalazioni</p>
+              {filteredReports.map((report) => (
+                <Card
+                  key={report.id}
+                  className={`cursor-pointer transition-all hover:shadow-md ${
+                    selectedReport?.id === report.id
+                      ? "ring-2 ring-blue-500"
+                      : ""
+                  }`}
+                  onClick={() => {
+                    setSelectedReport(report);
+                    setSelectedHub(null);
+                  }}
+                >
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <CardTitle className="text-sm font-medium line-clamp-2">
+                        {report.title}
+                      </CardTitle>
+                      <Badge
+                        className={`text-xs ${getPriorityColor(
+                          report.severity
+                        )} hover:${getPriorityColor(report.severity)}`}
+                      >
+                        {report.severity}
+                      </Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+                      {report.description}
+                    </p>
+                    <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
                       <div className="flex items-center gap-1">
-                        <User className="w-3 h-3" />
-                        <span>{report.name}</span>
+                        <Calendar className="w-3 h-3" />
+                        <span>
+                          {dayjs(report.created_at).format("DD/MM/YYYY")}
+                        </span>
                       </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      {report.name && (
+                        <div className="flex items-center gap-1">
+                          <User className="w-3 h-3" />
+                          <span>{report.name}</span>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
 
-            {filteredReports.length === 0 && (
-              <div className="text-center py-8 text-gray-500">
-                <AlertCircle className="w-8 h-8 mx-auto mb-2" />
-                <p>Nessuna segnalazione trovata</p>
-                <p className="text-sm">
-                  Prova a modificare i filtri di ricerca
-                </p>
-              </div>
-            )}
+              {filteredReports.length === 0 && (
+                <div className="text-center py-8 text-gray-500">
+                  <AlertCircle className="w-8 h-8 mx-auto mb-2" />
+                  <p>Nessuna segnalazione trovata</p>
+                  <p className="text-sm">
+                    Prova a modificare i filtri di ricerca
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Map */}
         <div className="flex-1 relative">
           <Map
             reports={filteredReports}
             selectedReportId={selectedReport?.id}
+            selectedHubId={selectedHub?.id}
             getReports={getReports}
+            hubs={hubs}
           />
           {selectedReport && (
             <div className="absolute z-2000 top-4 right-4 w-80">
@@ -222,6 +283,11 @@ export default function MapDetails({ name }: { name?: string }) {
                 report={selectedReport}
                 onClose={() => setSelectedReport(null)}
               />
+            </div>
+          )}
+          {selectedHub && (
+            <div className="absolute z-2000 top-4 right-4 w-80">
+              <HubCard hub={selectedHub} onClose={() => setSelectedHub(null)} />
             </div>
           )}
         </div>

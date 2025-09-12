@@ -15,7 +15,7 @@ import MapClickHandler from "./map-handler";
 import { ReportModal } from "./report-modal";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Popover } from "./ui/popover";
-import { useHubs } from "@/app/map/useHubs";
+import { Hub, useHubs } from "@/app/map/useHubs";
 
 const markerIcon = L.icon({
   iconUrl: markerIconPng.src,
@@ -50,10 +50,14 @@ const markerIconHub = L.icon({
 export default function DynamicMap({
   reports,
   selectedReportId,
+  selectedHubId,
   getReports,
+  hubs,
 }: {
   reports: Report[];
+  hubs: Hub[];
   selectedReportId?: string | null;
+  selectedHubId?: string | null;
   getReports: () => void;
 }) {
   const [clickedPosition, setClickedPosition] = useState<
@@ -61,12 +65,6 @@ export default function DynamicMap({
   >(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   console.log({ clickedPosition });
-
-  const { hubs, getHubs } = useHubs();
-
-  useEffect(() => {
-    getHubs();
-  }, []);
 
   const handleMapClick = (coords: [number, number]) => {
     console.log({ coords });
@@ -157,7 +155,7 @@ export default function DynamicMap({
           <Marker
             position={{ lat: hub.lat, lng: hub.lng }}
             key={hub?.id}
-            icon={markerIconHub}
+            icon={selectedHubId === hub.id ? markerIconSelected : markerIconHub}
           >
             <Popup>
               <CardHeader className="pb-3 min-w-3">

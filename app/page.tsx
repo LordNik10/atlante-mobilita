@@ -31,7 +31,7 @@ export default async function HomePage() {
             <div className="flex items-center gap-3">
               <Image src={logo} alt="Logo" className="w-24 h-24 text-white" />
 
-              <h1 className="text-xl font-bold text-gray-900">
+              <h1 className="text-xs sm:text-xl font-bold text-gray-900">
                 P.In.Mov - Atlante della Mobilità Giusta
               </h1>
             </div>

@@ -2,11 +2,15 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -14,16 +18,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { MapPin, Camera, Upload } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 import type { ReportCategory } from "@/lib/types";
-import { categoryLabels } from "@/lib/mock-data";
-import { saveReport } from "@/lib/storage";
+import { MapPin } from "lucide-react";
+import { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import { useReports } from "@/app/map/useReports";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -55,6 +55,8 @@ export function ReportModal({
     },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const { getReports } = useReports();
 
   useEffect(() => {
     if (initialLocation) {
@@ -91,6 +93,8 @@ export function ReportModal({
         },
         body: JSON.stringify(report),
       });
+
+      await getReports();
 
       // Reset form
       setFormData({

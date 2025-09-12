@@ -13,13 +13,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UserAvatar } from "@/components/user-avatar";
-import { categoryLabels, priorityLabels, statusLabels } from "@/lib/mock-data";
-import type {
-  Priority,
-  Report,
-  ReportCategory,
-  ReportStatus,
-} from "@/lib/types";
+import { priorityLabels } from "@/lib/mock-data";
+import type { Priority, Report } from "@/lib/types";
+import { getPriorityColor } from "@/lib/utils";
+import dayjs from "dayjs";
 import {
   AlertCircle,
   ArrowLeft,
@@ -32,28 +29,21 @@ import {
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import dayjs from "dayjs";
+import { useReports } from "./useReports";
 
 const Map = dynamic(() => import("../../components/dynamic-map"), {
   ssr: false, // 👈 disabilita SSR per Leaflet
 });
 
 export default function MapDetails({ name }: { name?: string }) {
-  const [reports, setReports] = useState<Report[]>([]);
-  const [filteredReports, setFilteredReports] = useState<Report[]>([]);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [filters, setFilters] = useState({
     severity: "all" as Priority | "all",
     search: "",
   });
 
-  const getReports = async () => {
-    const res = await fetch("/api/report/fetch");
-    const data = await res.json();
-    console.log({ data });
-    setReports(data);
-    setFilteredReports(data);
-  };
+  const { reports, filteredReports, getReports, setFilteredReports } =
+    useReports();
 
   console.log({ reports });
 
@@ -83,38 +73,6 @@ export default function MapDetails({ name }: { name?: string }) {
 
     setFilteredReports(filtered);
   }, [reports, filters]);
-
-  const getStatusColor = (status: ReportStatus) => {
-    switch (status) {
-      case "submitted":
-        return "bg-blue-100 text-blue-800";
-      case "under-review":
-        return "bg-yellow-100 text-yellow-800";
-      case "in-progress":
-        return "bg-orange-100 text-orange-800";
-      case "resolved":
-        return "bg-green-100 text-green-800";
-      case "rejected":
-        return "bg-red-100 text-red-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
-
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case "urgent":
-        return "bg-red-100 text-red-800";
-      case "high":
-        return "bg-orange-100 text-orange-800";
-      case "medium":
-        return "bg-yellow-100 text-yellow-800";
-      case "low":
-        return "bg-green-100 text-green-800";
-      default:
-        return "bg-gray-100 text-gray-800";
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -253,16 +211,12 @@ export default function MapDetails({ name }: { name?: string }) {
 
         {/* Map */}
         <div className="flex-1 relative">
-          {/* <MapView
+          <Map
             reports={filteredReports}
-            selectedReport={selectedReport}
-            onReportSelect={setSelectedReport}
-          /> */}
-          <Map />
-
-          {/* Selected Report Details */}
+            selectedReportId={selectedReport?.id}
+          />
           {selectedReport && (
-            <div className="absolute top-4 right-4 w-80">
+            <div className="absolute z-2000 top-4 right-4 w-80">
               <ReportCard
                 report={selectedReport}
                 onClose={() => setSelectedReport(null)}

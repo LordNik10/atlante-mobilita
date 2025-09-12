@@ -9,6 +9,7 @@ import { Badge, Calendar, User } from "lucide-react";
 import { useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import markerIconPng from "../assets/marker-icon.png";
+import markerIconPngSelected from "../assets/marker-icon-selected.png";
 import MapClickHandler from "./map-handler";
 import { ReportModal } from "./report-modal";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -16,6 +17,16 @@ import { Popover } from "./ui/popover";
 
 const markerIcon = L.icon({
   iconUrl: markerIconPng.src,
+
+  iconSize: [30, 45], // size of the icon
+  shadowSize: [50, 64], // size of the shadow
+  iconAnchor: [15, 48], // point of the icon which will correspond to marker's location
+  shadowAnchor: [4, 62], // the same for the shadow
+  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+});
+
+const markerIconSelected = L.icon({
+  iconUrl: markerIconPngSelected.src,
 
   iconSize: [30, 45], // size of the icon
   shadowSize: [50, 64], // size of the shadow
@@ -77,7 +88,9 @@ export default function DynamicMap({
           <Marker
             position={{ lat: report.lat, lng: report.lng }}
             key={report?.id}
-            icon={markerIcon}
+            icon={
+              selectedReportId === report.id ? markerIconSelected : markerIcon
+            }
           >
             <Popover
               open={selectedReportId === report.id}

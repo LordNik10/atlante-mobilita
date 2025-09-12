@@ -33,6 +33,12 @@ export function saveReports(reports: Report[]): void {
   }
 }
 
+export function saveReport(report: Report): void {
+  const existingReports = getStoredReports();
+  const updatedReports = [...existingReports, report];
+  saveReports(updatedReports);
+}
+
 export function addReport(
   report: Omit<Report, "id" | "submittedAt" | "updatedAt">
 ): Report {

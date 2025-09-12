@@ -12,7 +12,7 @@ export interface Report {
   photos?: string[];
   submittedBy: string | null; // null for anonymous reports
   submittedAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   municipalNotes?: string;
   priority: Priority;
 }

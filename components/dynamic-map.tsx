@@ -6,14 +6,16 @@ import dayjs from "dayjs";
 import L, { LatLngLiteral } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Badge, Calendar, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import markerIconPng from "../assets/marker-icon.png";
 import markerIconPngSelected from "../assets/marker-icon-selected.png";
+import markerIconPngHub from "../assets/marker-icon-hub.png";
 import MapClickHandler from "./map-handler";
 import { ReportModal } from "./report-modal";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Popover } from "./ui/popover";
+import { useHubs } from "@/app/map/useHubs";
 
 const markerIcon = L.icon({
   iconUrl: markerIconPng.src,
@@ -27,6 +29,16 @@ const markerIcon = L.icon({
 
 const markerIconSelected = L.icon({
   iconUrl: markerIconPngSelected.src,
+
+  iconSize: [30, 45], // size of the icon
+  shadowSize: [50, 64], // size of the shadow
+  iconAnchor: [15, 48], // point of the icon which will correspond to marker's location
+  shadowAnchor: [4, 62], // the same for the shadow
+  popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
+});
+
+const markerIconHub = L.icon({
+  iconUrl: markerIconPngHub.src,
 
   iconSize: [30, 45], // size of the icon
   shadowSize: [50, 64], // size of the shadow
@@ -50,6 +62,12 @@ export default function DynamicMap({
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   console.log({ clickedPosition });
 
+  const { hubs, getHubs } = useHubs();
+
+  useEffect(() => {
+    getHubs();
+  }, []);
+
   const handleMapClick = (coords: [number, number]) => {
     console.log({ coords });
 
@@ -67,7 +85,7 @@ export default function DynamicMap({
       <MapContainer
         key={`${center.lat}-${center.lng}`}
         center={center}
-        zoom={16}
+        zoom={14}
         style={{
           width: "100%",
           height: "100%",
@@ -132,6 +150,25 @@ export default function DynamicMap({
                 </CardContent>
               </Popup>
             </Popover>
+          </Marker>
+        ))}
+
+        {hubs.map((hub) => (
+          <Marker
+            position={{ lat: hub.lat, lng: hub.lng }}
+            key={hub?.id}
+            icon={markerIconHub}
+          >
+            <Popup>
+              <CardHeader className="pb-3 min-w-3">
+                <div className="flex flex-col items-start justify-between gap-2">
+                  <CardTitle className="text-sm font-medium line-clamp-2">
+                    {hub.name}
+                  </CardTitle>
+                  <p>{hub.services}</p>
+                </div>
+              </CardHeader>
+            </Popup>
           </Marker>
         ))}
         <MapClickHandler onMapClick={handleMapClick} />

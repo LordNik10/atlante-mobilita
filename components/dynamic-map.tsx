@@ -163,9 +163,11 @@ export default function DynamicMap({
                   <CardTitle className="text-sm font-medium line-clamp-2">
                     {hub.name}
                   </CardTitle>
-                  <p>{hub.services}</p>
                 </div>
               </CardHeader>
+              <CardContent className="pt-0">
+                <p>{hub.services}</p>
+              </CardContent>
             </Popup>
           </Marker>
         ))}

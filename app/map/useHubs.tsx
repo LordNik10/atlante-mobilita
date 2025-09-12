@@ -11,13 +11,16 @@ export interface Hub {
 
 export const useHubs = () => {
   const [hubs, setHubs] = useState<Hub[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const getHubs = async () => {
+    setIsLoading(true);
     const res = await fetch("/api/hub/fetch");
     const data = await res.json();
     console.log({ data });
     setHubs(data);
+    setIsLoading(false);
   };
 
-  return { hubs, getHubs };
+  return { hubs, getHubs, isLoading };
 };

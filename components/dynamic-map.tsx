@@ -1,21 +1,22 @@
 "use client";
 
+import { Hub } from "@/app/map/useHubs";
 import { Report } from "@/lib/types";
 import { getPriorityColor } from "@/lib/utils";
 import dayjs from "dayjs";
 import L, { LatLngLiteral } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Badge, Calendar, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import markerIconPng from "../assets/marker-icon.png";
-import markerIconPngSelected from "../assets/marker-icon-selected.png";
 import markerIconPngHub from "../assets/marker-icon-hub.png";
+import markerIconPngSelected from "../assets/marker-icon-selected.png";
+import markerIconPng from "../assets/marker-icon.png";
 import MapClickHandler from "./map-handler";
 import { ReportModal } from "./report-modal";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Popover } from "./ui/popover";
-import { Hub, useHubs } from "@/app/map/useHubs";
+import { user } from "@/app/sever-actions/user/getUserInfo";
 
 const markerIcon = L.icon({
   iconUrl: markerIconPng.src,
@@ -53,11 +54,13 @@ export default function DynamicMap({
   selectedHubId,
   getReports,
   hubs,
+  user,
 }: {
   reports: Report[];
   hubs: Hub[];
   selectedReportId?: string | null;
   selectedHubId?: string | null;
+  user: user | null;
   getReports: () => void;
 }) {
   const [clickedPosition, setClickedPosition] = useState<
@@ -183,6 +186,7 @@ export default function DynamicMap({
           lat: clickedPosition ? clickedPosition[0] : 0,
           lng: clickedPosition ? clickedPosition[1] : 0,
         }}
+        user={user}
         onReportSubmitted={() => {}}
         getReports={getReports}
       />

@@ -1,19 +1,8 @@
-import { getUserInfoFromCookie } from "@/utils/supabase/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { sql } from "../../(config)/postgres";
 
-export async function GET(_: NextRequest) {
+export async function GET() {
   try {
-    const userInfo = await getUserInfoFromCookie();
-    console.log({ userInfo });
-
-    if (!userInfo) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
     const res =
       await sql`SELECT r.*, u.name, u.email FROM public."report" r INNER JOIN public."user" u ON r.user_id = u.id `;
 

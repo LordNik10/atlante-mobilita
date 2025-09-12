@@ -22,6 +22,8 @@ import { Textarea } from "@/components/ui/textarea";
 import type { ReportCategory } from "@/lib/types";
 import { MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
+import { user } from "@/app/sever-actions/user/getUserInfo";
+import Link from "next/link";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -30,6 +32,7 @@ interface ReportModalProps {
     lat: number;
     lng: number;
   };
+  user: user | null;
   onReportSubmitted?: () => void;
   getReports: () => void;
 }
@@ -40,6 +43,7 @@ export function ReportModal({
   initialLocation,
   onReportSubmitted,
   getReports,
+  user,
 }: ReportModalProps) {
   console.log({ initialLocation });
 
@@ -125,95 +129,102 @@ export function ReportModal({
             Nuova Segnalazione
           </DialogTitle>
         </DialogHeader>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Location Display */}
-          <div className="bg-blue-50 p-4 rounded-lg">
-            <div className="flex items-center gap-2 text-blue-800 font-medium mb-2">
-              <MapPin className="w-4 h-4" />
-              Posizione selezionata
+        {!user ? (
+          <Link href="/login" className="text-blue-600 hover:underline">
+            Effettua il login per inviare una segnalazione
+          </Link>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Location Display */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-center gap-2 text-blue-800 font-medium mb-2">
+                <MapPin className="w-4 h-4" />
+                Posizione selezionata
+              </div>
+              <p className="text-sm text-blue-700">
+                {formData.location.address}
+              </p>
+              <p className="text-xs text-blue-600 mt-1">
+                Coordinate: {formData.location.lat.toFixed(6)},{" "}
+                {formData.location.lng.toFixed(6)}
+              </p>
             </div>
-            <p className="text-sm text-blue-700">{formData.location.address}</p>
-            <p className="text-xs text-blue-600 mt-1">
-              Coordinate: {formData.location.lat.toFixed(6)},{" "}
-              {formData.location.lng.toFixed(6)}
-            </p>
-          </div>
 
-          {/* Title */}
-          <div className="space-y-2">
-            <Label htmlFor="title">Titolo della segnalazione *</Label>
-            <Input
-              id="title"
-              value={formData.title}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, title: e.target.value }))
-              }
-              placeholder="Descrivi brevemente il problema"
-              required
-            />
-          </div>
-
-          {/* Priority */}
-          <div className="space-y-2">
-            <Label htmlFor="priority">Priorità</Label>
-            <div style={{ position: "relative" }}>
-              <Select
-                value={formData.priority}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({ ...prev, priority: value }))
+            {/* Title */}
+            <div className="space-y-2">
+              <Label htmlFor="title">Titolo della segnalazione *</Label>
+              <Input
+                id="title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, title: e.target.value }))
                 }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="low">Bassa</SelectItem>
-                  <SelectItem value="medium">Media</SelectItem>
-                  <SelectItem value="high">Alta</SelectItem>
-                  <SelectItem value="urgent">Urgente</SelectItem>
-                </SelectContent>
-              </Select>
+                placeholder="Descrivi brevemente il problema"
+                required
+              />
             </div>
-          </div>
 
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Descrizione dettagliata *</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              placeholder="Fornisci una descrizione dettagliata del problema, inclusi eventuali rischi per la sicurezza"
-              rows={4}
-              required
-            />
-          </div>
+            {/* Priority */}
+            <div className="space-y-2">
+              <Label htmlFor="priority">Priorità</Label>
+              <div style={{ position: "relative" }}>
+                <Select
+                  value={formData.priority}
+                  onValueChange={(value) =>
+                    setFormData((prev) => ({ ...prev, priority: value }))
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="low">Bassa</SelectItem>
+                    <SelectItem value="medium">Media</SelectItem>
+                    <SelectItem value="high">Alta</SelectItem>
+                    <SelectItem value="urgent">Urgente</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-          {/* Submit Buttons */}
-          <div className="flex gap-3 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onClose}
-              className="flex-1 bg-transparent"
-            >
-              Annulla
-            </Button>
-            <Button
-              type="submit"
-              disabled={isSubmitting || !formData.title}
-              className="flex-1"
-            >
-              {isSubmitting ? "Invio in corso..." : "Invia Segnalazione"}
-            </Button>
-          </div>
-        </form>
+            {/* Description */}
+            <div className="space-y-2">
+              <Label htmlFor="description">Descrizione dettagliata *</Label>
+              <Textarea
+                id="description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    description: e.target.value,
+                  }))
+                }
+                placeholder="Fornisci una descrizione dettagliata del problema, inclusi eventuali rischi per la sicurezza"
+                rows={4}
+                required
+              />
+            </div>
+
+            {/* Submit Buttons */}
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={onClose}
+                className="flex-1 bg-transparent"
+              >
+                Annulla
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting || !formData.title}
+                className="flex-1"
+              >
+                {isSubmitting ? "Invio in corso..." : "Invia Segnalazione"}
+              </Button>
+            </div>
+          </form>
+        )}
       </DialogContent>
     </Dialog>
   );

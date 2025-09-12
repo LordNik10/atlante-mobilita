@@ -32,12 +32,13 @@ import { useEffect, useState } from "react";
 import { useReports } from "./useReports";
 import { Hub, useHubs } from "./useHubs";
 import { HubCard } from "@/components/hub-card";
+import { user } from "../sever-actions/user/getUserInfo";
 
 const Map = dynamic(() => import("../../components/dynamic-map"), {
   ssr: false, // 👈 disabilita SSR per Leaflet
 });
 
-export default function MapDetails({ name }: { name?: string }) {
+export default function MapDetails({ user }: { user: user | null }) {
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
   const [selectedHub, setSelectedHub] = useState<Hub | null>(null);
   const [filters, setFilters] = useState({
@@ -46,19 +47,26 @@ export default function MapDetails({ name }: { name?: string }) {
   });
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
-  const { reports, filteredReports, getReports, setFilteredReports } =
-    useReports();
+  const {
+    reports,
+    filteredReports,
+    getReports,
+    setFilteredReports,
+    isLoading: isLoadingReports,
+  } = useReports();
 
-  const { hubs, getHubs } = useHubs();
+  const { hubs, getHubs, isLoading: isLoadingHubs } = useHubs();
 
   console.log({ reports });
 
   useEffect(() => {
     getReports();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     getHubs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -82,7 +90,16 @@ export default function MapDetails({ name }: { name?: string }) {
     }
 
     setFilteredReports(filtered);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reports, filters]);
+
+  if (isLoadingReports || isLoadingHubs) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center text-gray-500">Caricamento mappa...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -102,10 +119,7 @@ export default function MapDetails({ name }: { name?: string }) {
               </div>
             </Link>
             <div className="flex items-center gap-4">
-              <Link href="/report">
-                <Button>Nuova Segnalazione</Button>
-              </Link>
-              <UserAvatar name={name} />
+              <UserAvatar name={user?.name} />
             </div>
           </div>
         </div>
@@ -276,6 +290,7 @@ export default function MapDetails({ name }: { name?: string }) {
             selectedHubId={selectedHub?.id}
             getReports={getReports}
             hubs={hubs}
+            user={user}
           />
           {selectedReport && (
             <div className="absolute z-2000 top-4 right-4 w-80">

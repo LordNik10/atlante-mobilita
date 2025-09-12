@@ -4,5 +4,5 @@ import MapDetails from "./MapDetails";
 export default async function MapPage() {
   const user = await getUserInfoFromCookie();
 
-  return <MapDetails name={user?.name} />;
+  return <MapDetails user={user} />;
 }

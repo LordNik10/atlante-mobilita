@@ -31,15 +31,12 @@ export default async function HomePage() {
                 <MapPin className="w-5 h-5 text-white" />
               </div>
               <h1 className="text-xl font-bold text-gray-900">
-                Atlante della Mobilità Giusta
+                Atlante Mobilità
               </h1>
             </div>
             <nav className="flex items-center gap-4">
               <Link href="/map">
                 <Button variant="ghost">Mappa</Button>
-              </Link>
-              <Link href="/report">
-                <Button>Segnala</Button>
               </Link>
               <UserAvatar name={user?.name} />
             </nav>
@@ -63,12 +60,6 @@ export default async function HomePage() {
             per tutti i cittadini.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/report">
-              <Button size="lg" className="w-full sm:w-auto">
-                <FileText className="w-5 h-5 mr-2" />
-                Fai una Segnalazione
-              </Button>
-            </Link>
             <Link href="/map">
               <Button
                 variant="outline"
@@ -105,7 +96,7 @@ export default async function HomePage() {
                 <CardTitle>Segnala Problemi</CardTitle>
                 <CardDescription>
                   Documenta barriere architettoniche, marciapiedi danneggiati,
-                  parcheggi occupati e altri problemi di mobilità
+                  strade dissestate e altri problemi di mobilità
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -171,9 +162,9 @@ export default async function HomePage() {
 
             <div className="bg-white p-6 rounded-lg shadow-sm border">
               <Shield className="w-8 h-8 text-red-600 mb-3" />
-              <h3 className="font-semibold mb-2">Parcheggi Occupati</h3>
+              <h3 className="font-semibold mb-2">Strade dissestate</h3>
               <p className="text-sm text-gray-600">
-                Stalli disabili utilizzati impropriamente
+                Buche, crepe e superfici irregolari
               </p>
             </div>
 
@@ -198,9 +189,9 @@ export default async function HomePage() {
             La tua segnalazione può fare la differenza per rendere la città più
             accessibile a tutti
           </p>
-          <Link href="/report">
+          <Link href="/map">
             <Button size="lg" variant="secondary">
-              Fai la Tua Prima Segnalazione
+              Esplora Mappa
             </Button>
           </Link>
         </div>
@@ -231,16 +222,6 @@ export default async function HomePage() {
                 <li>
                   <Link href="/map" className="hover:text-white">
                     Mappa Interattiva
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/report" className="hover:text-white">
-                    Fai una Segnalazione
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about" className="hover:text-white">
-                    Chi Siamo
                   </Link>
                 </li>
               </ul>

@@ -34,14 +34,14 @@ export function UserAvatar({ className = "", name }: UserAvatarProps) {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild className="z-2500">
         <div
           className={`w-8 h-8 rounded-full bg-blue-600 hover:bg-blue-700 transition-colors flex items-center justify-center cursor-pointer ${className}`}
         >
           <span className="text-sm font-medium text-white">{initial}</span>
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
+      <DropdownMenuContent align="end" className="w-48 z-2500">
         <DropdownMenuItem asChild>
           <Link href="/profile" className="flex items-center w-full">
             <span>Profilo</span>

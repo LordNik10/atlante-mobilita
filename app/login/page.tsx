@@ -1,8 +1,3 @@
-"use client";
-
-import type React from "react";
-
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,68 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MapPin, ArrowLeft, Mail, Lock, User } from "lucide-react";
+import { ArrowLeft, MapPin } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { login } from "./actions";
+import Image from "next/image";
+import logo from "../../public/pinmov-logo.png";
 
-export default function LoginPage() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [loginData, setLoginData] = useState({
-    email: "",
-    password: "",
-  });
-  const [registerData, setRegisterData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Simulate authentication
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Mock authentication logic
-    if (loginData.email === "admin@comune.it") {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ email: loginData.email, role: "municipal" })
-      );
-      router.push("/admin");
-    } else {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ email: loginData.email, role: "citizen" })
-      );
-      router.push("/profile");
-    }
-
-    setIsLoading(false);
-  };
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Simulate registration
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ email: registerData.email, role: "citizen" })
-    );
-    router.push("/profile");
-
-    setIsLoading(false);
-  };
-
+export default async function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4">
       {/* Header */}
@@ -83,9 +23,11 @@ export default function LoginPage() {
         >
           <ArrowLeft className="w-5 h-5" />
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
-              <MapPin className="w-4 h-4 text-white" />
-            </div>
+            <Image
+              src={logo}
+              alt="Logo"
+              className="w-24 h-24 text-white mx-auto"
+            />
             <span className="font-medium">Torna alla Home</span>
           </div>
         </Link>
@@ -93,177 +35,46 @@ export default function LoginPage() {
 
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-            <MapPin className="w-6 h-6 text-white" />
-          </div>
-          <CardTitle className="text-2xl">
-            Atlante della Mobilità Giusta
-          </CardTitle>
+          <Image
+            src={logo}
+            alt="Logo"
+            className="w-24 h-24 text-white mx-auto"
+          />
+          <CardTitle className="text-2xl">Accedi a P.In.Mov</CardTitle>
           <CardDescription>
-            Accedi al tuo account o registrati per iniziare
+            Accedi con il tuo account Google per iniziare
           </CardDescription>
         </CardHeader>
 
-        <CardContent>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Accedi</TabsTrigger>
-              <TabsTrigger value="register">Registrati</TabsTrigger>
-            </TabsList>
+        <CardContent className="space-y-6">
+          <form>
+            <Button
+              formAction={login}
+              className="w-full h-12 bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 flex items-center justify-center gap-3"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path
+                  fill="#4285F4"
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                />
+                <path
+                  fill="#34A853"
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                />
+                <path
+                  fill="#FBBC05"
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                />
+                <path
+                  fill="#EA4335"
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                />
+              </svg>
+              Accedi con Google
+            </Button>
+          </form>
 
-            <TabsContent value="login" className="space-y-4">
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input
-                      id="login-email"
-                      type="email"
-                      placeholder="la-tua-email@esempio.it"
-                      value={loginData.email}
-                      onChange={(e) =>
-                        setLoginData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input
-                      id="login-password"
-                      type="password"
-                      placeholder="La tua password"
-                      value={loginData.password}
-                      onChange={(e) =>
-                        setLoginData((prev) => ({
-                          ...prev,
-                          password: e.target.value,
-                        }))
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Accesso in corso..." : "Accedi"}
-                </Button>
-              </form>
-
-              <div className="text-center text-sm text-gray-600">
-                <p>Account demo:</p>
-                <p>
-                  <strong>Cittadino:</strong> user@esempio.it
-                </p>
-                <p>
-                  <strong>Comune:</strong> admin@comune.it
-                </p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="register" className="space-y-4">
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="register-name">Nome Completo</Label>
-                  <div className="relative">
-                    <User className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input
-                      id="register-name"
-                      placeholder="Il tuo nome completo"
-                      value={registerData.name}
-                      onChange={(e) =>
-                        setRegisterData((prev) => ({
-                          ...prev,
-                          name: e.target.value,
-                        }))
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="register-email">Email</Label>
-                  <div className="relative">
-                    <Mail className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input
-                      id="register-email"
-                      type="email"
-                      placeholder="la-tua-email@esempio.it"
-                      value={registerData.email}
-                      onChange={(e) =>
-                        setRegisterData((prev) => ({
-                          ...prev,
-                          email: e.target.value,
-                        }))
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="register-password">Password</Label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input
-                      id="register-password"
-                      type="password"
-                      placeholder="Scegli una password"
-                      value={registerData.password}
-                      onChange={(e) =>
-                        setRegisterData((prev) => ({
-                          ...prev,
-                          password: e.target.value,
-                        }))
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="confirm-password">Conferma Password</Label>
-                  <div className="relative">
-                    <Lock className="w-4 h-4 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                    <Input
-                      id="confirm-password"
-                      type="password"
-                      placeholder="Conferma la password"
-                      value={registerData.confirmPassword}
-                      onChange={(e) =>
-                        setRegisterData((prev) => ({
-                          ...prev,
-                          confirmPassword: e.target.value,
-                        }))
-                      }
-                      className="pl-10"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "Registrazione in corso..." : "Registrati"}
-                </Button>
-              </form>
-            </TabsContent>
-          </Tabs>
-
-          <div className="mt-6 text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-gray-600">
             <p>
               Continuando accetti i nostri{" "}
               <Link href="/terms" className="text-blue-600 hover:underline">

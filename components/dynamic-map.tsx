@@ -27,9 +27,11 @@ const markerIcon = L.icon({
 export default function DynamicMap({
   reports,
   selectedReportId,
+  getReports,
 }: {
   reports: Report[];
   selectedReportId?: string | null;
+  getReports: () => void;
 }) {
   const [clickedPosition, setClickedPosition] = useState<
     [number, number] | null
@@ -132,6 +134,7 @@ export default function DynamicMap({
           lng: clickedPosition ? clickedPosition[1] : 0,
         }}
         onReportSubmitted={() => {}}
+        getReports={getReports}
       />
     </>
   );

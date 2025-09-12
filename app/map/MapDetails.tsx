@@ -214,6 +214,7 @@ export default function MapDetails({ name }: { name?: string }) {
           <Map
             reports={filteredReports}
             selectedReportId={selectedReport?.id}
+            getReports={getReports}
           />
           {selectedReport && (
             <div className="absolute z-2000 top-4 right-4 w-80">

@@ -22,8 +22,6 @@ import { Textarea } from "@/components/ui/textarea";
 import type { ReportCategory } from "@/lib/types";
 import { MapPin } from "lucide-react";
 import { useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
-import { useReports } from "@/app/map/useReports";
 
 interface ReportModalProps {
   isOpen: boolean;
@@ -33,6 +31,7 @@ interface ReportModalProps {
     lng: number;
   };
   onReportSubmitted?: () => void;
+  getReports: () => void;
 }
 
 export function ReportModal({
@@ -40,6 +39,7 @@ export function ReportModal({
   onClose,
   initialLocation,
   onReportSubmitted,
+  getReports,
 }: ReportModalProps) {
   console.log({ initialLocation });
 
@@ -55,8 +55,6 @@ export function ReportModal({
     },
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const { getReports } = useReports();
 
   useEffect(() => {
     if (initialLocation) {

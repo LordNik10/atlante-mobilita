@@ -10,7 +10,6 @@ export const useReports = () => {
     setIsLoading(true);
     const res = await fetch("/api/report/fetch");
     const data = await res.json();
-    console.log({ data });
     setReports(data);
     setFilteredReports(data);
     setIsLoading(false);

@@ -58,8 +58,6 @@ export default function MapDetails({ user }: { user: user | null }) {
 
   const { hubs, getHubs, isLoading: isLoadingHubs } = useHubs();
 
-  console.log({ reports });
-
   useEffect(() => {
     getReports();
     // eslint-disable-next-line react-hooks/exhaustive-deps

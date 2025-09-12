@@ -67,11 +67,8 @@ export default function DynamicMap({
     [number, number] | null
   >(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  console.log({ clickedPosition });
 
   const handleMapClick = (coords: [number, number]) => {
-    console.log({ coords });
-
     setClickedPosition(coords);
     setIsReportModalOpen(true);
   };

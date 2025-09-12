@@ -17,7 +17,6 @@ export const useHubs = () => {
     setIsLoading(true);
     const res = await fetch("/api/hub/fetch");
     const data = await res.json();
-    console.log({ data });
     setHubs(data);
     setIsLoading(false);
   };

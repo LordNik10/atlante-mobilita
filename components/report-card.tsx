@@ -15,8 +15,6 @@ interface ReportCardProps {
 }
 
 export function ReportCard({ report, onClose }: ReportCardProps) {
-  console.log({ report });
-
   return (
     <Card className="shadow-lg">
       <CardHeader className="pb-3">

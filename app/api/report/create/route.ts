@@ -5,7 +5,6 @@ import { sql } from "../../(config)/postgres";
 export async function POST(request: NextRequest) {
   try {
     const userInfo = await getUserInfoFromCookie();
-    console.log({ userInfo });
 
     if (!userInfo) {
       return NextResponse.json(
@@ -15,7 +14,6 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    console.log({ body });
 
     if (!body.title || !body.lat || !body.lng || !body.priority) {
       return NextResponse.json(

@@ -4,8 +4,6 @@ import { createClient } from "@/utils/supabase/server";
 import { User } from "@supabase/supabase-js";
 
 export async function createUserInfo(userInfo?: User) {
-  console.log(userInfo);
-
   const supabase = await createClient();
   try {
     const res = await supabase.from("user").insert({

@@ -45,8 +45,6 @@ export function ReportModal({
   getReports,
   user,
 }: ReportModalProps) {
-  console.log({ initialLocation });
-
   const [formData, setFormData] = useState({
     title: "",
     description: "",

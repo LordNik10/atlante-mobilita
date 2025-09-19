@@ -50,16 +50,16 @@ const markerIconHub = L.icon({
 
 export default function DynamicMap({
   reports,
-  selectedReportId,
-  selectedHubId,
+  selectedReport,
+  selectedHub,
   getReports,
   hubs,
   user,
 }: {
   reports: Report[];
   hubs: Hub[];
-  selectedReportId?: string | null;
-  selectedHubId?: string | null;
+  selectedReport?: Report | null;
+  selectedHub?: Hub | null;
   user: user | null;
   getReports: () => void;
 }) {
@@ -74,8 +74,8 @@ export default function DynamicMap({
   };
 
   const center: LatLngLiteral = {
-    lat: 43.723,
-    lng: 10.3966,
+    lat: selectedReport?.lat ?? selectedHub?.lat ?? 43.723,
+    lng: selectedReport?.lng ?? selectedHub?.lng ?? 10.3966,
   };
 
   return (
@@ -105,11 +105,11 @@ export default function DynamicMap({
             position={{ lat: report.lat, lng: report.lng }}
             key={report?.id}
             icon={
-              selectedReportId === report.id ? markerIconSelected : markerIcon
+              selectedReport?.id === report.id ? markerIconSelected : markerIcon
             }
           >
             <Popover
-              open={selectedReportId === report.id}
+              open={selectedReport?.id === report.id}
               onOpenChange={() => {}}
             >
               <Popup>
@@ -155,7 +155,9 @@ export default function DynamicMap({
           <Marker
             position={{ lat: hub.lat, lng: hub.lng }}
             key={hub?.id}
-            icon={selectedHubId === hub.id ? markerIconSelected : markerIconHub}
+            icon={
+              selectedHub?.id === hub.id ? markerIconSelected : markerIconHub
+            }
           >
             <Popup>
               <CardHeader className="pb-3 min-w-3">

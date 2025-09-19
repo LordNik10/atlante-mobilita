@@ -34,6 +34,7 @@ import logo from "../../public/pinmov-logo.png";
 import { user } from "../sever-actions/user/getUserInfo";
 import { Hub, useHubs } from "./useHubs";
 import { useReports } from "./useReports";
+import useWindowSize from "./useWindowSize";
 
 const Map = dynamic(() => import("../../components/dynamic-map"), {
   ssr: false, // 👈 disabilita SSR per Leaflet
@@ -47,6 +48,10 @@ export default function MapDetails({ user }: { user: user | null }) {
     search: "",
   });
   const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+
+  const { width } = useWindowSize();
+
+  const isMobile = width !== undefined && width < 768;
 
   const {
     reports,
@@ -204,6 +209,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                   onClick={() => {
                     setSelectedHub(hub);
                     setSelectedReport(null);
+                    setIsFiltersOpen(isMobile ? false : isFiltersOpen);
                   }}
                 >
                   <CardHeader className="pb-3">
@@ -228,6 +234,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                   onClick={() => {
                     setSelectedReport(report);
                     setSelectedHub(null);
+                    setIsFiltersOpen(isMobile ? false : isFiltersOpen);
                   }}
                 >
                   <CardHeader className="pb-3">
@@ -283,8 +290,8 @@ export default function MapDetails({ user }: { user: user | null }) {
         <div className="flex-1 relative">
           <Map
             reports={filteredReports}
-            selectedReportId={selectedReport?.id}
-            selectedHubId={selectedHub?.id}
+            selectedReport={selectedReport}
+            selectedHub={selectedHub}
             getReports={getReports}
             hubs={hubs}
             user={user}

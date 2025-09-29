@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pisa in movimento (P.In.Mov.)
 
-## Getting Started
+Una piattaforma digitale che permette ai cittadini di **segnalare ostacoli o barriere architettoniche** e di **consultare una mappa interattiva** con tutte le segnalazioni.
+L’obiettivo è favorire una mobilità più inclusiva e sostenibile nella città di Pisa. 🌍
 
-First, run the development server:
+🔗 **Demo online**: [https://pinmov.vercel.app/](https://pinmov.vercel.app/)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Funzionalità principali
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Landing page**: una pagina introduttiva che spiega lo scopo della piattaforma.
+- **Mappa interattiva**: accessibile a tutti, anche senza login, per consultare le segnalazioni già inserite.
+- **Segnalazioni con login Google**: per inserire un ostacolo o una barriera architettonica è necessario autenticarsi.
+- **Accessibilità per tutti**: la consultazione è pubblica, così ogni cittadino può trarre beneficio dalle informazioni condivise.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🛠️ Tecnologie utilizzate
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js](https://nextjs.org/) — framework React per lo sviluppo web.
+- [shadcn/ui](https://ui.shadcn.com/) — componenti UI moderni e accessibili.
+- [Supabase](https://supabase.com/) — backend as a service per autenticazione e database.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Obiettivi futuri
 
-## Deploy on Vercel
+- Implementazione di un **sistema di crediti verdi**: gli utenti guadagneranno punti facendo segnalazioni e potranno poi spenderli o donarli ad altri utenti, creando un circolo virtuoso di collaborazione.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📌 Note
+
+Questo progetto è stato realizzato come prototipo nell’ambito di un bando sulla **mobilità sostenibile**.
+Attualmente rimane un progetto portfolio, non è aperto a contributi esterni.

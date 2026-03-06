@@ -134,6 +134,7 @@ export default function MapDetails({ user }: { user: user | null }) {
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
             variant="ghost"
             size="sm"
+            data-testid="filter-button"
           >
             <Filter className="w-4 h-4" />
             Filtri
@@ -166,6 +167,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                       }))
                     }
                     className="pl-10"
+                    data-testid="report-search-input"
                   />
                 </div>
 
@@ -178,7 +180,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                     }))
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="priority-filter-select">
                     <SelectValue placeholder="Tutte le priorità" />
                   </SelectTrigger>
                   <SelectContent>

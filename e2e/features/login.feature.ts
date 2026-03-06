@@ -8,6 +8,6 @@ export class LoginFeature {
         await this.page.getByRole('textbox', { name: 'Password' }).click();
         await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
         await this.page.getByRole('button', { name: 'Accedi con email' }).click();
-        await expect(this.page.getByRole('button', { name: 'Esplora la Mappa' })).toBeVisible({ timeout: 10000 });
+        await expect(this.page.getByTestId('map-button')).toBeVisible({ timeout: 10000 });
     }
 }

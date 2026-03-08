@@ -14,7 +14,7 @@ interface ReportCardProps {
 
 export function HubCard({ hub, onClose }: ReportCardProps) {
   return (
-    <Card className="shadow-lg">
+    <Card className="shadow-lg" data-testid="hub-card">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -27,7 +27,7 @@ export function HubCard({ hub, onClose }: ReportCardProps) {
         <div className="flex items-center gap-2 mt-2">
           <Badge
             className={`text-xs ${getPriorityColor(
-              hub.services
+              hub.services,
             )} hover:${getPriorityColor(hub.services)}`}
           >
             {hub.services}

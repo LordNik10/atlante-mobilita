@@ -78,7 +78,7 @@ export default function MapDetails({ user }: { user: user | null }) {
 
     if (filters.severity !== "all") {
       filtered = filtered.filter(
-        (report) => report.severity === filters.severity
+        (report) => report.severity === filters.severity,
       );
     }
 
@@ -89,7 +89,7 @@ export default function MapDetails({ user }: { user: user | null }) {
           report.title.toLowerCase().includes(searchLower) ||
           report.description?.toLowerCase().includes(searchLower) ||
           report.lat.toString().includes(searchLower) ||
-          report.lng.toString().includes(searchLower)
+          report.lng.toString().includes(searchLower),
       );
     }
 
@@ -205,6 +205,7 @@ export default function MapDetails({ user }: { user: user | null }) {
               {hubs.map((hub) => (
                 <Card
                   key={hub.id}
+                  data-testid={`hub-card-${hub.id}`}
                   className={`cursor-pointer transition-all hover:shadow-md ${
                     selectedHub?.id === hub.id ? "ring-2 ring-blue-500" : ""
                   }`}
@@ -246,7 +247,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                       </CardTitle>
                       <Badge
                         className={`text-xs ${getPriorityColor(
-                          report.severity
+                          report.severity,
                         )} hover:${getPriorityColor(report.severity)}`}
                       >
                         {report.severity}

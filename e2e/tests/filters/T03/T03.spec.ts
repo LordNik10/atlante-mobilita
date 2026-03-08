@@ -3,7 +3,7 @@ import { test } from "@/fixtures";
 import { T03Operations } from "./T03Operations";
 import { createStepCounter } from "@/e2e/utils";
 import { T03Checks } from "./T03Checks";
-test("Select Filter", async ({ authPage }) => {
+test("Select Hub", async ({ authPage }) => {
   const { MapFeature } = getFeatures(authPage);
   const stepCounter = createStepCounter();
 

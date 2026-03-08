@@ -186,7 +186,11 @@ export default function MapDetails({ user }: { user: user | null }) {
                   <SelectContent>
                     <SelectItem value="all">Tutte le priorità</SelectItem>
                     {Object.entries(priorityLabels).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>
+                      <SelectItem
+                        key={key}
+                        value={key}
+                        data-testid={`priority-filter-${key}`}
+                      >
                         {label}
                       </SelectItem>
                     ))}
@@ -229,6 +233,7 @@ export default function MapDetails({ user }: { user: user | null }) {
               {filteredReports.map((report) => (
                 <Card
                   key={report.id}
+                  data-testid={`report-card-${report.id}`}
                   className={`cursor-pointer transition-all hover:shadow-md ${
                     selectedReport?.id === report.id
                       ? "ring-2 ring-blue-500"
@@ -249,6 +254,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                         className={`text-xs ${getPriorityColor(
                           report.severity,
                         )} hover:${getPriorityColor(report.severity)}`}
+                        data-testid="report-card-priority"
                       >
                         {report.severity}
                       </Badge>

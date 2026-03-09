@@ -4,7 +4,7 @@ import { createStepCounter } from "@/e2e/utils";
 import { T06Operations } from "./T06Operations";
 import { T06Checks } from "./T06Checks";
 
-test("Select Marker Hub", async ({ authPage }) => {
+test("Create Report", async ({ authPage }) => {
   const responsePromise = authPage.waitForResponse("**/api/report/create");
 
   const stepCounter = createStepCounter();
@@ -16,7 +16,7 @@ test("Select Marker Hub", async ({ authPage }) => {
     await operations.step1();
     await checks.step1();
   });
-  await test.step(stepCounter("Click on hub marker"), async () => {
+  await test.step(stepCounter("Click on map"), async () => {
     await operations.step2();
     await checks.step2();
   });

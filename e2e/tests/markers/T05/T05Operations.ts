@@ -1,12 +1,9 @@
 import { Page } from "@playwright/test";
-import { MapFeature } from "../../../features/map.feature";
 
 export class T05Operations {
   private page: Page;
-  private MapFeature: MapFeature;
-  constructor(page: Page, MapFeature: MapFeature) {
+  constructor(page: Page) {
     this.page = page;
-    this.MapFeature = MapFeature;
   }
 
   async step1() {

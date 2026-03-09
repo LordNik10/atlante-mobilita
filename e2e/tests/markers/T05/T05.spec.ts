@@ -9,7 +9,7 @@ const hubID = "27d85b6b-885c-41b1-b7ff-c874c952de86";
 test("Select Marker Hub", async ({ authPage }) => {
   const stepCounter = createStepCounter();
   const { MapFeature } = getFeatures(authPage);
-  const operations = new T05Operations(authPage, MapFeature);
+  const operations = new T05Operations(authPage);
   const checks = new T05Checks(authPage, MapFeature);
 
   await test.step(stepCounter("Navigate to map"), async () => {

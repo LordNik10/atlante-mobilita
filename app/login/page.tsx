@@ -34,7 +34,7 @@ export default async function LoginPage() {
         </Link>
       </div>
 
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md" data-testid="login-card">
         <CardHeader className="text-center">
           <Image
             src={logo}
@@ -55,9 +55,7 @@ export default async function LoginPage() {
               <span className="w-full border-t" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-card px-2 text-muted-foreground">
-                oppure
-              </span>
+              <span className="bg-card px-2 text-muted-foreground">oppure</span>
             </div>
           </div>
 

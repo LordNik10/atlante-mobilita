@@ -1,8 +1,10 @@
 import { getFeatures } from "@/e2e/features";
-import { test } from "@/fixtures";
+import { BASE_URL, test } from "@/fixtures";
 import { createStepCounter } from "@/e2e/utils";
 import { T06Operations } from "./T06Operations";
 import { T06Checks } from "./T06Checks";
+
+let reportID: string;
 
 test("Create Report", async ({ authPage }) => {
   const responsePromise = authPage.waitForResponse("**/api/report/create");
@@ -25,8 +27,13 @@ test("Create Report", async ({ authPage }) => {
     await operations.step3("Test Title", "Test Description");
     const response = await responsePromise;
     const responseBody = await response.json();
-    const reportID = responseBody.data.id;
+    reportID = responseBody.data.id;
     console.log("Created report ID:", reportID);
     await checks.step3(reportID);
   });
+});
+
+test.afterEach(async ({ page }) => {
+  const res = await page.request.delete(`${BASE_URL}/api/report/delete/${reportID}`);
+  console.log("Deleted report:", res);
 });

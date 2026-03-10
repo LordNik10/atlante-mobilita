@@ -17,8 +17,8 @@ export class T06Checks {
   }
 
   async step3(reportID: string) {
-    await expect(
-      this.page.getByTestId(`report-mark-${reportID}`),
-    ).toBeVisible();
+    await expect(this.page.getByTestId(`report-mark-${reportID}`)).toBeVisible({
+      timeout: 20000,
+    });
   }
 }

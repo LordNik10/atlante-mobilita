@@ -127,6 +127,7 @@ const ReportMarker = ({
 
   return (
     <Marker
+      ref={markerRef}
       position={{ lat: report.lat, lng: report.lng }}
       key={report?.id}
       icon={selectedReport?.id === report.id ? markerIconSelected : markerIcon}

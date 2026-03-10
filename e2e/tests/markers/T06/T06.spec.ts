@@ -25,7 +25,7 @@ test("Create Report", async ({ authPage }) => {
     await operations.step3("Test Title", "Test Description");
     const response = await responsePromise;
     const responseBody = await response.json();
-    const reportID = responseBody.id;
+    const reportID = responseBody.data.id;
     console.log("Created report ID:", reportID);
     await checks.step3(reportID);
   });

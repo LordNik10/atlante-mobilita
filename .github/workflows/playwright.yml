@@ -22,6 +22,10 @@ jobs:
           E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
           E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
           BASE_URL: ${{ secrets.BASE_URL }}
+          NEXT_DATABASE_URL: ${{ secrets.NEXT_DATABASE_URL }}
+          NEXT_SUPABASE_URL: ${{ secrets.NEXT_SUPABASE_URL }}
+          NEXT_SUPABASE_ANON_KEY: ${{ secrets.NEXT_SUPABASE_ANON_KEY }}
+          NEXT_PUBLIC_REDIRECT_URL: ${{ secrets.NEXT_PUBLIC_REDIRECT_URL || 'http://localhost:3000' }}
         run: yarn playwright test
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}

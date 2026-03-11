@@ -15,9 +15,14 @@ if (!E2E_EMAIL || !E2E_PASSWORD) {
 
 type MyFixtures = {
   authPage: Page;
+  notAuthPage: Page;
 };
 
 export const test = base.extend<MyFixtures>({
+  notAuthPage: async ({ page }, runWithPage) => {
+    await page.goto(URL);
+    await runWithPage(page);
+  },
   authPage: async ({ page }, runWithPage) => {
     await page.goto(URL);
     const { LoginFeature } = getFeatures(page);

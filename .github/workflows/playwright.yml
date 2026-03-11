@@ -33,3 +33,25 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+
+  deploy-report:
+    name: Deploy Playwright report to GitHub Pages
+    needs: test
+    if: always() && (needs.test.result == 'success' || needs.test.result == 'failure')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment: github-pages
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: playwright-report
+      - uses: actions/upload-pages-artifact@3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
+      - name: Report URL
+        run: echo "Report Playwright: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY

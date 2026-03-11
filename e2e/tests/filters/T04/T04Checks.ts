@@ -26,19 +26,19 @@ export class T04Checks {
     await expect(this.page.getByTestId("priority-filter-urgent")).toBeVisible();
   }
   async step4() {
+    await expect(
+      this.page.locator("div[data-testid^='report-card-']").first().getByTestId("report-card-priority"),
+    ).toHaveText("high", { timeout: 10000 });
+
     const reportsCard = await this.page
       .locator("div[data-testid^='report-card-']")
       .all();
-    console.log("reportsCard", reportsCard);
-    reportsCard.forEach(async (report) => {
-      console.log(
-        "report",
-        await report.getByTestId("report-card-priority").textContent(),
-      );
+
+    for (const report of reportsCard) {
       await expect(report.getByTestId("report-card-priority")).toHaveText(
         "high",
         { timeout: 10000 },
       );
-    });
+    }
   }
 }

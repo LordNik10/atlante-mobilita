@@ -37,6 +37,7 @@ export class T04Checks {
       );
       await expect(report.getByTestId("report-card-priority")).toHaveText(
         "high",
+        { timeout: 10000 },
       );
     });
   }

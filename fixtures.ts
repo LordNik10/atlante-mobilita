@@ -20,7 +20,7 @@ type MyFixtures = {
 
 export const test = base.extend<MyFixtures>({
   notAuthPage: async ({ page }, runWithPage) => {
-    await page.goto(URL);
+    await page.goto(BASE_URL);
     await runWithPage(page);
   },
   authPage: async ({ page }, runWithPage) => {

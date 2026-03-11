@@ -54,4 +54,5 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
       - name: Report URL
-        run: echo "Report Playwright: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+        run: |
+          echo "Report Playwright: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY

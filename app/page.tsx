@@ -37,7 +37,7 @@ export default async function HomePage() {
             </div>
             <nav className="flex items-center gap-4">
               <Link href="/map">
-                <Button variant="ghost">Mappa</Button>
+                <Button variant="ghost" data-testid="map-button">Mappa</Button>
               </Link>
               <UserAvatar name={user?.name} />
             </nav>

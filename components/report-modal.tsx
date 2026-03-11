@@ -128,7 +128,11 @@ export function ReportModal({
           </DialogTitle>
         </DialogHeader>
         {!user ? (
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link
+            data-testid="login-link"
+            href="/login"
+            className="text-blue-600 hover:underline"
+          >
             Effettua il login per inviare una segnalazione
           </Link>
         ) : (

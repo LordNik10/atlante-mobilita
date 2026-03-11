@@ -7,8 +7,14 @@ import dayjs from "dayjs";
 import L, { LatLngLiteral } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Badge, Calendar, User } from "lucide-react";
-import { useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { useEffect, useRef, useState } from "react";
+import {
+  MapContainer,
+  Marker,
+  MarkerProps,
+  Popup,
+  TileLayer,
+} from "react-leaflet";
 import markerIconPngHub from "../assets/marker-icon-hub.png";
 import markerIconPngSelected from "../assets/marker-icon-selected.png";
 import markerIconPng from "../assets/marker-icon.png";
@@ -47,6 +53,123 @@ const markerIconHub = L.icon({
   shadowAnchor: [4, 62], // the same for the shadow
   popupAnchor: [-3, -76], // point from which the popup should open relative to the iconAnchor
 });
+
+const HubMarker = ({
+  hub,
+  selectedHub,
+  markerIconSelected,
+  markerIconHub,
+}: {
+  hub: Hub;
+  selectedHub?: Hub | null;
+  markerIconSelected: L.Icon;
+  markerIconHub: L.Icon;
+}) => {
+  const markerRef = useRef(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (markerRef.current && (markerRef.current as any)._icon) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (markerRef.current as any)._icon.setAttribute(
+        "data-testid",
+        `hub-mark-${hub.id}`,
+      );
+    }
+  }, [hub.id]);
+
+  return (
+    <Marker
+      ref={markerRef}
+      position={{ lat: hub.lat, lng: hub.lng }}
+      icon={selectedHub?.id === hub.id ? markerIconSelected : markerIconHub}
+    >
+      <Popup>
+        <CardHeader className="pb-3 min-w-3">
+          <div className="flex flex-col items-start justify-between gap-2">
+            <CardTitle
+              data-testid={`hub-title-${hub.id}`}
+              className="text-sm font-medium line-clamp-2"
+            >
+              {hub.name}
+            </CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-0">
+          <p data-testid={`hub-services-${hub.id}`}>{hub.services}</p>
+        </CardContent>
+      </Popup>
+    </Marker>
+  );
+};
+
+const ReportMarker = ({
+  report,
+  selectedReport,
+  markerIconSelected,
+}: {
+  report: Report;
+  selectedReport?: Report | null;
+  markerIconSelected: L.Icon;
+}) => {
+  const markerRef = useRef(null);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (markerRef.current && (markerRef.current as any)._icon) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (markerRef.current as any)._icon.setAttribute(
+        "data-testid",
+        `report-mark-${report.id}`,
+      );
+    }
+  }, [report.id]);
+
+  return (
+    <Marker
+      ref={markerRef}
+      position={{ lat: report.lat, lng: report.lng }}
+      key={report?.id}
+      icon={selectedReport?.id === report.id ? markerIconSelected : markerIcon}
+    >
+      <Popover open={selectedReport?.id === report.id} onOpenChange={() => {}}>
+        <Popup>
+          <CardHeader className="pb-3">
+            <div className="flex items-start justify-between gap-2">
+              <CardTitle className="text-sm font-medium line-clamp-2">
+                {report.title}
+              </CardTitle>
+              <Badge
+                className={`text-xs ${getPriorityColor(
+                  report.severity,
+                )} hover:${getPriorityColor(report.severity)}`}
+              >
+                {report.severity}
+              </Badge>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <p className="text-sm text-gray-600 line-clamp-2 mb-2">
+              {report.description}
+            </p>
+            <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
+              <div className="flex items-center gap-1">
+                <Calendar className="w-3 h-3" />
+                <span>{dayjs(report.created_at).format("DD/MM/YYYY")}</span>
+              </div>
+              {report.name && (
+                <div className="flex items-center gap-1">
+                  <User className="w-3 h-3" />
+                  <span>{report.name}</span>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Popup>
+      </Popover>
+    </Marker>
+  );
+};
 
 export default function DynamicMap({
   reports,
@@ -101,77 +224,22 @@ export default function DynamicMap({
           attribution='<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
         />
         {reports.map((report) => (
-          <Marker
-            position={{ lat: report.lat, lng: report.lng }}
-            key={report?.id}
-            icon={
-              selectedReport?.id === report.id ? markerIconSelected : markerIcon
-            }
-          >
-            <Popover
-              open={selectedReport?.id === report.id}
-              onOpenChange={() => {}}
-            >
-              <Popup>
-                <CardHeader className="pb-3">
-                  <div className="flex items-start justify-between gap-2">
-                    <CardTitle className="text-sm font-medium line-clamp-2">
-                      {report.title}
-                    </CardTitle>
-                    <Badge
-                      className={`text-xs ${getPriorityColor(
-                        report.severity
-                      )} hover:${getPriorityColor(report.severity)}`}
-                    >
-                      {report.severity}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-sm text-gray-600 line-clamp-2 mb-2">
-                    {report.description}
-                  </p>
-                  <div className="flex items-center gap-4 text-xs text-gray-500 mt-1">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      <span>
-                        {dayjs(report.created_at).format("DD/MM/YYYY")}
-                      </span>
-                    </div>
-                    {report.name && (
-                      <div className="flex items-center gap-1">
-                        <User className="w-3 h-3" />
-                        <span>{report.name}</span>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Popup>
-            </Popover>
-          </Marker>
+          <ReportMarker
+            key={report.id}
+            report={report}
+            selectedReport={selectedReport}
+            markerIconSelected={markerIconSelected}
+          />
         ))}
 
         {hubs.map((hub) => (
-          <Marker
-            position={{ lat: hub.lat, lng: hub.lng }}
-            key={hub?.id}
-            icon={
-              selectedHub?.id === hub.id ? markerIconSelected : markerIconHub
-            }
-          >
-            <Popup>
-              <CardHeader className="pb-3 min-w-3">
-                <div className="flex flex-col items-start justify-between gap-2">
-                  <CardTitle className="text-sm font-medium line-clamp-2">
-                    {hub.name}
-                  </CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <p>{hub.services}</p>
-              </CardContent>
-            </Popup>
-          </Marker>
+          <HubMarker
+            key={hub.id}
+            hub={hub}
+            selectedHub={selectedHub}
+            markerIconSelected={markerIconSelected}
+            markerIconHub={markerIconHub}
+          />
         ))}
         <MapClickHandler onMapClick={handleMapClick} />
       </MapContainer>

@@ -6,9 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft, MapPin } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { login } from "./actions";
+import { LoginForm } from "./LoginForm";
 import Image from "next/image";
 import logo from "../../public/pinmov-logo.png";
 
@@ -33,7 +34,7 @@ export default async function LoginPage() {
         </Link>
       </div>
 
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md" data-testid="login-card">
         <CardHeader className="text-center">
           <Image
             src={logo}
@@ -42,11 +43,22 @@ export default async function LoginPage() {
           />
           <CardTitle className="text-2xl">Accedi a P.In.Mov</CardTitle>
           <CardDescription>
-            Accedi con il tuo account Google per iniziare
+            Accedi con email e password o con Google
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-6">
+          <LoginForm />
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">oppure</span>
+            </div>
+          </div>
+
           <form>
             <Button
               formAction={login}

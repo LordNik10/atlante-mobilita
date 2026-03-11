@@ -78,7 +78,7 @@ export default function MapDetails({ user }: { user: user | null }) {
 
     if (filters.severity !== "all") {
       filtered = filtered.filter(
-        (report) => report.severity === filters.severity
+        (report) => report.severity === filters.severity,
       );
     }
 
@@ -89,7 +89,7 @@ export default function MapDetails({ user }: { user: user | null }) {
           report.title.toLowerCase().includes(searchLower) ||
           report.description?.toLowerCase().includes(searchLower) ||
           report.lat.toString().includes(searchLower) ||
-          report.lng.toString().includes(searchLower)
+          report.lng.toString().includes(searchLower),
       );
     }
 
@@ -134,6 +134,7 @@ export default function MapDetails({ user }: { user: user | null }) {
             onClick={() => setIsFiltersOpen(!isFiltersOpen)}
             variant="ghost"
             size="sm"
+            data-testid="filter-button"
           >
             <Filter className="w-4 h-4" />
             Filtri
@@ -166,6 +167,7 @@ export default function MapDetails({ user }: { user: user | null }) {
                       }))
                     }
                     className="pl-10"
+                    data-testid="report-search-input"
                   />
                 </div>
 
@@ -178,13 +180,17 @@ export default function MapDetails({ user }: { user: user | null }) {
                     }))
                   }
                 >
-                  <SelectTrigger>
+                  <SelectTrigger data-testid="priority-filter-select">
                     <SelectValue placeholder="Tutte le priorità" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Tutte le priorità</SelectItem>
                     {Object.entries(priorityLabels).map(([key, label]) => (
-                      <SelectItem key={key} value={key}>
+                      <SelectItem
+                        key={key}
+                        value={key}
+                        data-testid={`priority-filter-${key}`}
+                      >
                         {label}
                       </SelectItem>
                     ))}
@@ -203,6 +209,7 @@ export default function MapDetails({ user }: { user: user | null }) {
               {hubs.map((hub) => (
                 <Card
                   key={hub.id}
+                  data-testid={`hub-card-${hub.id}`}
                   className={`cursor-pointer transition-all hover:shadow-md ${
                     selectedHub?.id === hub.id ? "ring-2 ring-blue-500" : ""
                   }`}
@@ -226,6 +233,7 @@ export default function MapDetails({ user }: { user: user | null }) {
               {filteredReports.map((report) => (
                 <Card
                   key={report.id}
+                  data-testid={`report-card-${report.id}`}
                   className={`cursor-pointer transition-all hover:shadow-md ${
                     selectedReport?.id === report.id
                       ? "ring-2 ring-blue-500"
@@ -244,8 +252,9 @@ export default function MapDetails({ user }: { user: user | null }) {
                       </CardTitle>
                       <Badge
                         className={`text-xs ${getPriorityColor(
-                          report.severity
+                          report.severity,
                         )} hover:${getPriorityColor(report.severity)}`}
+                        data-testid="report-card-priority"
                       >
                         {report.severity}
                       </Badge>

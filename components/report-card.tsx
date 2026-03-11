@@ -31,7 +31,7 @@ export function ReportCard({ report, onClose }: ReportCardProps) {
         <div className="flex items-center gap-2 mt-2">
           <Badge
             className={`text-xs ${getPriorityColor(
-              report.severity
+              report.severity,
             )} hover:${getPriorityColor(report.severity)}`}
           >
             {priorityLabels[report.severity]}

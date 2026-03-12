@@ -13,11 +13,11 @@ export class T05Checks {
     });
   }
   async step2(hubID: string) {
-    await expect(this.page.getByTestId(`hub-title-${hubID}`)).toHaveText(
-      "hub 1",
-    );
-    await expect(this.page.getByTestId(`hub-services-${hubID}`)).toHaveText(
-      "monopattini bici elettriche",
-    );
+    await expect(
+      this.page.getByTestId(`${this.MapFeature.hubTitleTestID}${hubID}`),
+    ).toHaveText("hub 1");
+    await expect(
+      this.page.getByTestId(`${this.MapFeature.hubServicesTestID}${hubID}`),
+    ).toHaveText("monopattini bici elettriche");
   }
 }

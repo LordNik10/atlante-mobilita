@@ -7,8 +7,8 @@ test("Select High Priority Reports", async ({ authPage }) => {
   const { MapFeature } = getFeatures(authPage);
   const stepCounter = createStepCounter();
 
-  const operations = new T04Operations(authPage, MapFeature);
-  const checks = new T04Checks(authPage, MapFeature);
+  const operations = new T04Operations(MapFeature);
+  const checks = new T04Checks(MapFeature);
 
   await test.step(stepCounter("Navigate to map"), async () => {
     await operations.step1();

@@ -1,11 +1,8 @@
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { MapFeature } from "../../../features/map.feature";
 
 export class T04Checks {
-  constructor(
-    private readonly page: Page,
-    private readonly MapFeature: MapFeature,
-  ) {}
+  constructor(private readonly MapFeature: MapFeature) {}
 
   async step1() {
     await expect(this.MapFeature.filterSentinel).toBeVisible({
@@ -20,19 +17,19 @@ export class T04Checks {
   }
 
   async step3() {
-    await expect(this.page.getByTestId("priority-filter-low")).toBeVisible();
-    await expect(this.page.getByTestId("priority-filter-medium")).toBeVisible();
-    await expect(this.page.getByTestId("priority-filter-high")).toBeVisible();
-    await expect(this.page.getByTestId("priority-filter-urgent")).toBeVisible();
+    await expect(this.MapFeature.filterPriorityLowSentinel).toBeVisible();
+    await expect(this.MapFeature.filterPriorityMediumSentinel).toBeVisible();
+    await expect(this.MapFeature.filterPriorityHighSentinel).toBeVisible();
+    await expect(this.MapFeature.filterPriorityUrgentSentinel).toBeVisible();
   }
   async step4() {
     await expect(
-      this.page.locator("div[data-testid^='report-card-']").first().getByTestId("report-card-priority"),
+      this.MapFeature.allReportCardSentinel
+        .first()
+        .getByTestId("report-card-priority"),
     ).toHaveText("high", { timeout: 10000 });
 
-    const reportsCard = await this.page
-      .locator("div[data-testid^='report-card-']")
-      .all();
+    const reportsCard = await this.MapFeature.allReportCardSentinel.all();
 
     for (const report of reportsCard) {
       await expect(report.getByTestId("report-card-priority")).toHaveText(

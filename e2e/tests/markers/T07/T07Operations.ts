@@ -15,6 +15,6 @@ export class T07Operations {
   }
 
   async step3() {
-    await this.page.getByTestId("login-link").click();
+    await this.MapFeature.loginLinkSentinel.click();
   }
 }

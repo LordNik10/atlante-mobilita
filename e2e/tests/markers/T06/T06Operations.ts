@@ -15,8 +15,8 @@ export class T06Operations {
   }
 
   async step3(title: string, description: string) {
-    await this.page.locator("#title").fill(title);
-    await this.page.locator("#description").fill(description);
+    await this.MapFeature.titleModalSentinel.fill(title);
+    await this.MapFeature.descriptionModalSentinel.fill(description);
     await this.page.locator('button[type="submit"]').click();
   }
 }

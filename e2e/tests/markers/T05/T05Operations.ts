@@ -11,6 +11,8 @@ export class T05Operations {
     await this.MapFeature.mapButtonSentinel.click();
   }
   async step2(hubID: string) {
-    await this.page.getByTestId(`hub-mark-${hubID}`).click();
+    await this.page
+      .getByTestId(`${this.MapFeature.hubMarkersTestID}${hubID}`)
+      .click();
   }
 }

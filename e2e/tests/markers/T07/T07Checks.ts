@@ -17,11 +17,11 @@ export class T07Checks {
     await expect(this.page.locator("h2[data-slot='dialog-title']")).toHaveText(
       "Nuova Segnalazione",
     );
-    await expect(this.page.getByTestId("login-link")).toBeVisible();
+    await expect(this.MapFeature.loginLinkSentinel).toBeVisible();
   }
 
   async step3() {
-    await expect(this.page.getByTestId("login-card")).toBeVisible({
+    await expect(this.MapFeature.loginCardSentinel).toBeVisible({
       timeout: 20000,
     });
   }

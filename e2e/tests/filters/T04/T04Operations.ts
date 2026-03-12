@@ -1,11 +1,7 @@
-import { Page } from "@playwright/test";
 import { MapFeature } from "../../../features/map.feature";
 
 export class T04Operations {
-  constructor(
-    private readonly page: Page,
-    private readonly MapFeature: MapFeature,
-  ) {}
+  constructor(private readonly MapFeature: MapFeature) {}
 
   async step1() {
     await this.MapFeature.mapButtonSentinel.click();
@@ -15,10 +11,10 @@ export class T04Operations {
   }
 
   async step3() {
-    await this.page.getByTestId("priority-filter-select").click();
+    await this.MapFeature.filterPrioritySentinel.click();
   }
 
   async step4() {
-    await this.page.getByTestId("priority-filter-high").click();
+    await this.MapFeature.filterPriorityHighSentinel.click();
   }
 }

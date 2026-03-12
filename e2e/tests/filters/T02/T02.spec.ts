@@ -6,8 +6,8 @@ import { createStepCounter } from "@/e2e/utils";
 test("Filters", async ({ authPage }) => {
   const stepCounter = createStepCounter();
   const { MapFeature } = getFeatures(authPage);
-  const operations = new T02Operations(authPage, MapFeature);
-  const checks = new T02Checks(authPage, MapFeature);
+  const operations = new T02Operations(MapFeature);
+  const checks = new T02Checks(MapFeature);
 
   await test.step(stepCounter("Navigate to map"), async () => {
     await operations.step1();

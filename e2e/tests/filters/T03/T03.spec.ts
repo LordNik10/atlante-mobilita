@@ -8,7 +8,7 @@ test("Select Hub", async ({ authPage }) => {
   const stepCounter = createStepCounter();
 
   const operations = new T03Operations(authPage, MapFeature);
-  const checks = new T03Checks(authPage, MapFeature);
+  const checks = new T03Checks(MapFeature);
 
   await test.step(stepCounter("Navigate to map"), async () => {
     await operations.step1();

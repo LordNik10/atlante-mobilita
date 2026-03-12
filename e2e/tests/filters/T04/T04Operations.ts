@@ -2,15 +2,13 @@ import { Page } from "@playwright/test";
 import { MapFeature } from "../../../features/map.feature";
 
 export class T04Operations {
-  private page: Page;
-  private MapFeature: MapFeature;
-  constructor(page: Page, MapFeature: MapFeature) {
-    this.page = page;
-    this.MapFeature = MapFeature;
-  }
+  constructor(
+    private readonly page: Page,
+    private readonly MapFeature: MapFeature,
+  ) {}
 
   async step1() {
-    await this.page.getByTestId("map-button").click();
+    await this.MapFeature.mapButtonSentinel.click();
   }
   async step2() {
     await this.MapFeature.filterSentinel.click();

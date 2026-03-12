@@ -1,11 +1,8 @@
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { MapFeature } from "../../../features/map.feature";
 
 export class T03Checks {
-  constructor(
-    private readonly page: Page,
-    private readonly MapFeature: MapFeature,
-  ) {}
+  constructor(private readonly MapFeature: MapFeature) {}
 
   async step1() {
     await expect(this.MapFeature.filterSentinel).toBeVisible({
@@ -20,6 +17,6 @@ export class T03Checks {
   }
 
   async step3() {
-    await expect(this.page.getByTestId("hub-card")).toBeVisible();
+    await expect(this.MapFeature.hubCardSentinel).toBeVisible();
   }
 }

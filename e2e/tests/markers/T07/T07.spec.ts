@@ -7,7 +7,7 @@ import { T07Operations } from "./T07Operations";
 test("User must be logged to create report", async ({ notAuthPage }) => {
   const stepCounter = createStepCounter();
   const { MapFeature } = getFeatures(notAuthPage);
-  const operations = new T07Operations(notAuthPage);
+  const operations = new T07Operations(notAuthPage, MapFeature);
   const checks = new T07Checks(notAuthPage, MapFeature);
 
   await test.step(stepCounter("Navigate to map"), async () => {

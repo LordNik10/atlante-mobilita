@@ -1,6 +1,8 @@
-import { test } from '@/fixtures';
-import { expect } from '@playwright/test';
+import { getFeatures } from "@/e2e/features";
+import { test } from "@/fixtures";
+import { expect } from "@playwright/test";
 
-test('Login', async ({ authPage }) => {
-  await expect(authPage.getByRole('button', { name: 'Mappa', exact: true })).toBeVisible({ timeout: 10000 });
+test("Login", async ({ authPage }) => {
+  const { MapFeature } = getFeatures(authPage);
+  await expect(MapFeature.mapButtonSentinel).toBeVisible({ timeout: 10000 });
 });

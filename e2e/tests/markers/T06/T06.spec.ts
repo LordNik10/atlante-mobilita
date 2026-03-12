@@ -11,7 +11,7 @@ test("Create Report", async ({ authPage }) => {
 
   const stepCounter = createStepCounter();
   const { MapFeature } = getFeatures(authPage);
-  const operations = new T06Operations(authPage);
+  const operations = new T06Operations(authPage, MapFeature);
   const checks = new T06Checks(authPage, MapFeature);
 
   await test.step(stepCounter("Navigate to map"), async () => {
@@ -28,12 +28,13 @@ test("Create Report", async ({ authPage }) => {
     const response = await responsePromise;
     const responseBody = await response.json();
     reportID = responseBody.data.id;
-    console.log("Created report ID:", reportID);
     await checks.step3(reportID);
   });
 });
 
 test.afterEach(async ({ page }) => {
-  const res = await page.request.delete(`${BASE_URL}/api/report/delete/${reportID}`);
-  console.log("Deleted report:", res);
+  const res = await page.request.delete(
+    `${BASE_URL}/api/report/delete/${reportID}`,
+  );
+  console.log("Deleted report:", res.status());
 });

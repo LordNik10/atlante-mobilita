@@ -1,6 +1,7 @@
 "use client";
 
 import { Hub } from "@/app/map/useHubs";
+import { user } from "@/app/sever-actions/user/getUserInfo";
 import { Report } from "@/lib/types";
 import { getPriorityColor } from "@/lib/utils";
 import dayjs from "dayjs";
@@ -8,13 +9,7 @@ import L, { LatLngLiteral } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Badge, Calendar, User } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import {
-  MapContainer,
-  Marker,
-  MarkerProps,
-  Popup,
-  TileLayer,
-} from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import markerIconPngHub from "../assets/marker-icon-hub.png";
 import markerIconPngSelected from "../assets/marker-icon-selected.png";
 import markerIconPng from "../assets/marker-icon.png";
@@ -22,7 +17,6 @@ import MapClickHandler from "./map-handler";
 import { ReportModal } from "./report-modal";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Popover } from "./ui/popover";
-import { user } from "@/app/sever-actions/user/getUserInfo";
 
 const markerIcon = L.icon({
   iconUrl: markerIconPng.src,

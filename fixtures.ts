@@ -1,17 +1,6 @@
 import { Page, test as base } from "@playwright/test";
-import { getFeatures } from "./e2e/features";
 
 export const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-
-const URL = `${BASE_URL}/login`;
-const E2E_EMAIL = process.env.E2E_EMAIL;
-const E2E_PASSWORD = process.env.E2E_PASSWORD;
-
-if (!E2E_EMAIL || !E2E_PASSWORD) {
-  throw new Error(
-    "Missing E2E_EMAIL and/or E2E_PASSWORD environment variables for Playwright E2E tests.",
-  );
-}
 
 type MyFixtures = {
   authPage: Page;
@@ -19,14 +8,16 @@ type MyFixtures = {
 };
 
 export const test = base.extend<MyFixtures>({
-  notAuthPage: async ({ page }, runWithPage) => {
+  authPage: async ({ page }, runWithPage) => {
     await page.goto(BASE_URL);
     await runWithPage(page);
   },
-  authPage: async ({ page }, runWithPage) => {
-    await page.goto(URL);
-    const { LoginFeature } = getFeatures(page);
-    await LoginFeature.login(E2E_EMAIL, E2E_PASSWORD);
+
+  notAuthPage: async ({ browser }, runWithPage) => {
+    const context = await browser.newContext({ storageState: undefined });
+    const page = await context.newPage();
+    await page.goto(BASE_URL);
     await runWithPage(page);
+    await context.close();
   },
 });

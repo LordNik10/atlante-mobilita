@@ -43,11 +43,17 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
+  /* Auth: global setup esegue il login e salva storage state (non appare nel report HTML). */
+  globalSetup: path.join(__dirname, 'e2e', 'global-setup.ts'),
+
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: path.join(__dirname, 'e2e', '.auth', 'user.json'),
+      },
     },
 
     // {

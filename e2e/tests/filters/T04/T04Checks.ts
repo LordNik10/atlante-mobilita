@@ -10,7 +10,7 @@ export class T04Checks {
     });
   }
   async step2() {
-    await expect(this.MapFeature.searchSentinel).toBeVisible();
+    await expect(this.MapFeature.searchSentinel).toBeVisible({ timeout: 10000 });
     await expect(this.MapFeature.filterPrioritySentinel).toBeVisible();
     await expect(this.MapFeature.hubSentinel).toBeVisible();
     await expect(this.MapFeature.reportSentinel).toBeVisible();

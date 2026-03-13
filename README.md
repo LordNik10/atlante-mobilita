@@ -38,6 +38,9 @@ I test end-to-end sono realizzati con [Playwright](https://playwright.dev/) e co
 
 ```
 ├── e2e/
+│   ├── .auth/              # Storage state salvato dal global setup (gitignore, non versionato)
+│   │   └── user.json       # Sessione autenticata (cookie, localStorage)
+│   ├── global-setup.ts     # Esegue il login una volta e salva lo storage state (non è un test)
 │   ├── features/           # Page Object / feature (selettori e azioni riutilizzabili)
 │   │   ├── index.ts        # getFeatures(page) → LoginFeature, MapFeature
 │   │   ├── login.feature.ts
@@ -56,7 +59,7 @@ I test end-to-end sono realizzati con [Playwright](https://playwright.dev/) e co
 │           ├── T06/        # Creazione report (con cleanup afterEach)
 │           └── T07/        # Utente non loggato → redirect login
 ├── fixtures.ts             # Fixtures Playwright: authPage, notAuthPage, BASE_URL
-└── playwright.config.ts    # Configurazione Playwright
+└── playwright.config.ts   # Configurazione Playwright (globalSetup, storageState)
 ```
 
 ### Organizzazione dei test
@@ -68,8 +71,8 @@ I test end-to-end sono realizzati con [Playwright](https://playwright.dev/) e co
   In questo modo azioni e verifiche restano separate e i test sono più leggibili.
 - **Spec** (`*.spec.ts`): orchestrano gli step usando `test.step(stepCounter("Descrizione"), async () => { operations.stepN(); await checks.stepN(); })`, così nei report ogni step è numerato e descritto.
 - **Fixtures** (`fixtures.ts`):
-  - **`authPage`**: pagina già autenticata (va su `/login` e esegue login con `E2E_EMAIL` / `E2E_PASSWORD`).
-  - **`notAuthPage`**: pagina senza login (per test che verificano il redirect al login).
+  - **`authPage`**: pagina già autenticata. Il progetto carica lo **storage state** da `e2e/.auth/user.json` (creato dal global setup); la fixture fa solo `page.goto(BASE_URL)` per caricare l’app. Nessun login ripetuto in ogni test.
+  - **`notAuthPage`**: contesto nuovo con `storageState: undefined` (per non ereditare lo stato del progetto), poi `goto(BASE_URL)`. Usata per test che verificano il redirect al login (es. T07).
   - **`BASE_URL`**: usata da webServer in locale e da chiamate API (es. cleanup report in T06).
 
 I test che richiedono login usano `authPage`; quelli che devono verificare il comportamento senza login usano `notAuthPage`.
@@ -89,8 +92,9 @@ I test che richiedono login usano `authPage`; quelli che devono verificare il co
 ### Configurazione e variabili d’ambiente
 
 - **`playwright.config.ts`**: `testDir: './e2e'`, timeout 60s, esecuzione parallela, in CI: 1 worker, 2 retry, reporter HTML + GitHub. Trace salvata al primo retry. Caricamento variabili da `.env` tramite `dotenv`.
+- **Global setup** (`e2e/global-setup.ts`): eseguito **una volta** prima di tutti i test. Effettua il login con `E2E_EMAIL` / `E2E_PASSWORD`, salva la sessione in `e2e/.auth/user.json` e termina. Non è un test, quindi **non compare nel report HTML** (nessuna traccia delle credenziali nei report). Il progetto `chromium` usa `storageState` puntando a questo file, così i test partono già autenticati senza rifare il login.
 - **Web server**: se non è impostato un `BASE_URL` esterno (es. in CI con URL di preview), viene avviato in automatico `yarn build && yarn start` su `http://localhost:3000`.
-- **Variabili richieste** (locale e CI): `E2E_EMAIL`, `E2E_PASSWORD`. Opzionali/CI: `BASE_URL`, `NEXT_DATABASE_URL`, `NEXT_SUPABASE_*`, `NEXT_PUBLIC_REDIRECT_URL`.
+- **Variabili richieste** (locale e CI): `E2E_EMAIL`, `E2E_PASSWORD` (usate dal global setup per generare lo storage state). Opzionali/CI: `BASE_URL`, `NEXT_DATABASE_URL`, `NEXT_SUPABASE_*`, `NEXT_PUBLIC_REDIRECT_URL`.
 
 ### Esecuzione in locale
 

@@ -45,9 +45,19 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    /* Setup: run login once and save storage state */
+    {
+      name: 'setup',
+      testMatch: /.*\.setup\.ts/,
+    },
+    /* Tests run with saved auth state (no login per test) */
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: path.join(__dirname, 'e2e', '.auth', 'user.json'),
+      },
+      dependencies: ['setup'],
     },
 
     // {

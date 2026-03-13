@@ -29,7 +29,7 @@ async function globalSetup() {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  await page.goto(`${BASE_URL}/login`, { waitUntil: "networkidle", timeout: 60000 });
+  await page.goto(`${BASE_URL}/login`, { waitUntil: "load", timeout: 60000 });
   const { LoginFeature } = getFeatures(page);
   await LoginFeature.login(E2E_EMAIL, E2E_PASSWORD);
   await context.storageState({ path: authFile });

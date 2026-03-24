@@ -5,6 +5,10 @@ L’obiettivo è favorire una mobilità più inclusiva e sostenibile nella citt�
 
 🔗 **Demo online**: [https://pinmov.vercel.app/](https://pinmov.vercel.app/)
 
+<p align="center">
+  <img src="public/home.PNG" alt="Anteprima della homepage: P.In.Mov - Atlante della Mobilità Giusta" width="900" />
+</p>
+
 ---
 
 ## ✨ Funzionalità principali
@@ -13,6 +17,30 @@ L’obiettivo è favorire una mobilità più inclusiva e sostenibile nella citt�
 - **Mappa interattiva**: accessibile a tutti, anche senza login, per consultare le segnalazioni già inserite.
 - **Segnalazioni con login Google**: per inserire un ostacolo o una barriera architettonica è necessario autenticarsi.
 - **Accessibilità per tutti**: la consultazione è pubblica, così ogni cittadino può trarre beneficio dalle informazioni condivise.
+
+---
+
+## 📸 Screenshot dell’applicazione
+
+Anteprima dell’interfaccia: mappa delle segnalazioni, dettaglio di un punto sulla mappa e modale per creare una nuova segnalazione.
+
+### Mappa delle segnalazioni
+
+<p align="center">
+  <img src="public/map.PNG" alt="Mappa delle segnalazioni con sidebar filtri, hub e elenco segnalazioni" width="900" />
+</p>
+
+### Segnalazione selezionata sulla mappa
+
+<p align="center">
+  <img src="public/selectedmark.PNG" alt="Dettaglio della segnalazione selezionata con card informativa sulla mappa" width="900" />
+</p>
+
+### Creazione di una nuova segnalazione
+
+<p align="center">
+  <img src="public/formcreation.PNG" alt="Modale Nuova Segnalazione con posizione selezionata e campi del form" width="900" />
+</p>
 
 ---
 
